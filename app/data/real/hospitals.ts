@@ -20,6 +20,7 @@ import {
   type Fact,
   type Provenance,
 } from "@/app/data/provenance";
+import type { GeoPoint } from "@/app/lib/escalation";
 
 export const CHENNAI = "Chennai";
 export const TAMIL_NADU = "Tamil Nadu";
@@ -47,6 +48,12 @@ export interface Hospital {
   ownership: Ownership;
   /** `null` means unknown, never "no emergency department". */
   emergency: Fact<boolean>;
+  /**
+   * Latitude/longitude. Unknown for every record: the CMCHIS list does not
+   * publish coordinates and we have not confirmed them elsewhere, so distance
+   * is reported as unknown rather than estimated.
+   */
+  coordinates: Fact<GeoPoint>;
   officialWebsite: Fact<string>;
   provenance: Provenance;
 }
@@ -118,6 +125,9 @@ function build(seed: Seed): Hospital {
     category: "Multi-speciality",
     ownership: seed.ownership,
     emergency: seed.emergency ?? NO_EMERGENCY,
+    coordinates: unknown<GeoPoint>(
+      "We have not verified coordinates for this hospital, so distances to it cannot be calculated.",
+    ),
     officialWebsite: seed.officialWebsite ?? NO_WEBSITE,
     provenance: CMCHIS,
   };

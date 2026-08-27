@@ -13,6 +13,12 @@ const actions = [
     featured: true,
   },
   {
+    title: "Check a facility",
+    description:
+      "Need an ICU, a blood bank, a CT scan? See what the data shows at your hospital, and which others appear to have it.",
+    href: "/facility-check",
+  },
+  {
     title: "Explore insurance",
     description:
       "Real IRDAI-listed products, with their UIN and the actual policy wording.",

@@ -63,6 +63,14 @@ const NOT_VERIFIED = [
     why: "Network lists are set per insurer and can differ between two policies from the same insurer. They change without notice, and no third party can mirror them accurately. Every private insurer shows as Not verified against every hospital.",
   },
   {
+    what: "Which facilities a hospital has",
+    why: "The CMCHIS list publishes names, districts and ownership — not facilities. We have not obtained a facility inventory from any official source, so ICU, blood bank, CT and the rest read Could not be verified for every hospital. The one exception is emergency care, confirmed from a hospital website for one record.",
+  },
+  {
+    what: "Distances between hospitals",
+    why: "No coordinates are verified for any hospital, so the facility check reports distance as unknown rather than estimating it. Unknown distance is never treated as far, and such hospitals are never dropped from a radius search.",
+  },
+  {
     what: "Street addresses",
     why: `The CMCHIS list does not publish them, and we have not confirmed them from another official source. All ${TOTAL_REAL_HOSPITALS} hospital records leave the address empty.`,
   },

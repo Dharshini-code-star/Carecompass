@@ -2,6 +2,7 @@ import Link from "next/link";
 
 const TOOLS = [
   { href: "/hospitals", label: "Find a hospital" },
+  { href: "/facility-check", label: "Check a facility" },
   { href: "/insurance", label: "Explore insurance" },
   { href: "/understand-policy", label: "Understand my policy" },
   { href: "/coverage-estimator", label: "Coverage estimator" },
