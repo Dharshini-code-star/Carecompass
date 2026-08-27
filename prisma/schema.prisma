@@ -1,0 +1,465 @@
+// InsureGuide healthcare database — Chennai, Tamil Nadu.
+//
+// Two principles run through this schema and explain most of its shape:
+//
+// 1. NOTHING IS STORED WITHOUT ITS SOURCE. Every record that makes a claim
+//    about the real world points at a DataSource, and important individual
+//    fields can additionally be traced through DataEvidence. A row with no
+//    provenance is a bug.
+//
+// 2. UNKNOWN IS A FIRST-CLASS VALUE, DISTINCT FROM NO. A hospital's website
+//    not mentioning an ICU means UNKNOWN, never VERIFIED_UNAVAILABLE. The
+//    enums below make it impossible to collapse those two, because someone
+//    may act on this data at 2am.
+//
+// Geography is modelled down to pincode so the dataset can grow
+// Chennai -> Tamil Nadu -> India without a migration.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------------------------------------------------------------------------
+// Provenance
+// ---------------------------------------------------------------------------
+
+enum SourceType {
+  GOVERNMENT
+  HOSPITAL_OFFICIAL
+  INSURER_OFFICIAL
+  TPA_OFFICIAL
+  OPEN_DATA
+  MAP_PROVIDER
+  OTHER_RELIABLE
+}
+
+enum Reliability {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+/// Where a piece of information came from. Adding a row here is a deliberate
+/// claim that the source is authoritative for the kind of fact it is cited for.
+model DataSource {
+  id           String      @id @default(cuid())
+  key          String      @unique /// stable human-readable key used by the importer
+  name         String
+  organization String
+  sourceType   SourceType
+  url          String?
+  apiUrl       String?
+  reliability  Reliability @default(MEDIUM)
+  /// What this source may legitimately be cited for. Prevents scope creep.
+  authoritativeFor String?
+  notes        String?
+  lastCheckedAt DateTime?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  hospitals          Hospital[]
+  hospitalFacilities HospitalFacility[]
+  hospitalInsurances HospitalInsurance[]
+  bloodBanks         BloodBank[]
+  schemes            GovernmentScheme[]
+  evidence           DataEvidence[]
+
+  @@index([sourceType])
+}
+
+enum VerificationStatus {
+  VERIFIED
+  SOURCE_PROVIDED
+  NOT_VERIFIED
+  UNKNOWN
+}
+
+/// Field-level traceability: one row per (entity, field) whose value came from
+/// a specific source on a specific date. This is what lets someone ask "who
+/// says this hospital has an ICU, and when did you check?".
+model DataEvidence {
+  id         String   @id @default(cuid())
+  /// Table name, e.g. "Hospital", "HospitalFacility".
+  entityType String
+  entityId   String
+  /// Field this evidence supports, e.g. "phone", "status".
+  field      String
+  /// The value as asserted by the source, stored as text.
+  value      String
+  sourceUrl  String?
+  /// Verbatim snippet or note supporting the value, where available.
+  excerpt    String?
+  checkedAt  DateTime
+  notes      String?
+  createdAt  DateTime @default(now())
+
+  sourceId String
+  source   DataSource @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+
+  @@unique([entityType, entityId, field, sourceId])
+  @@index([entityType, entityId])
+}
+
+// ---------------------------------------------------------------------------
+// Hospitals
+// ---------------------------------------------------------------------------
+
+enum HospitalOwnership {
+  GOVERNMENT
+  PRIVATE
+  TRUST_OR_NGO
+  UNKNOWN
+}
+
+enum HospitalType {
+  MULTI_SPECIALTY
+  SINGLE_SPECIALTY
+  GENERAL
+  MEDICAL_COLLEGE
+  MATERNITY
+  CLINIC_OR_NURSING_HOME
+  DIAGNOSTIC_CENTRE
+  UNKNOWN
+}
+
+/// Tri-state availability. UNKNOWN means nobody checked; it never means "no".
+enum AvailabilityStatus {
+  VERIFIED_AVAILABLE
+  VERIFIED_UNAVAILABLE
+  UNKNOWN
+}
+
+model Hospital {
+  id           String            @id @default(cuid())
+  /// Stable slug derived from the name, used for idempotent upserts.
+  slug         String            @unique
+  name         String
+  /// Registered/legal name where it differs from the common name.
+  officialName String?
+  hospitalType HospitalType      @default(UNKNOWN)
+  ownership    HospitalOwnership @default(UNKNOWN)
+
+  // Geography — modelled to national granularity for later expansion.
+  address  String?
+  area     String?
+  district String?
+  city     String   @default("Chennai")
+  state    String   @default("Tamil Nadu")
+  country  String   @default("India")
+  pincode  String?
+
+  phone          String?
+  emergencyPhone String?
+  website        String?
+
+  /// Null means not geocoded. Never estimated.
+  latitude  Float?
+  longitude Float?
+
+  /// Whether an emergency department exists at all.
+  emergencyDepartment AvailabilityStatus @default(UNKNOWN)
+  /// Whether that emergency department runs 24x7. Separate question.
+  twentyFourSevenEmergency AvailabilityStatus @default(UNKNOWN)
+
+  verificationStatus VerificationStatus @default(NOT_VERIFIED)
+  lastVerifiedAt     DateTime?
+  /// When this record should be re-checked. Health data goes stale.
+  nextReviewAt       DateTime?
+  verificationNotes  String?
+
+  sourceId String?
+  source   DataSource? @relation(fields: [sourceId], references: [id])
+
+  facilities      HospitalFacility[]
+  insurances      HospitalInsurance[]
+  schemeLinks     HospitalScheme[]
+  specializations HospitalSpecialization[]
+  bloodBanks      BloodBank[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([city, district])
+  @@index([ownership])
+  @@index([latitude, longitude])
+}
+
+model Facility {
+  id       String  @id @default(cuid())
+  key      String  @unique /// e.g. "icu", "ct_scan"
+  name     String
+  category String
+  /// Whether this facility tends to matter in an emergency. Used for ranking
+  /// weights only — never a clinical judgement about an individual.
+  emergencyRelevant Boolean @default(false)
+  description       String?
+
+  hospitals HospitalFacility[]
+}
+
+/// A hospital/facility pair. The status enum is the whole point of this table.
+model HospitalFacility {
+  id     String             @id @default(cuid())
+  status AvailabilityStatus @default(UNKNOWN)
+
+  verificationStatus VerificationStatus @default(NOT_VERIFIED)
+  lastVerifiedAt     DateTime?
+  nextReviewAt       DateTime?
+  notes              String?
+
+  hospitalId String
+  hospital   Hospital @relation(fields: [hospitalId], references: [id], onDelete: Cascade)
+  facilityId String
+  facility   Facility @relation(fields: [facilityId], references: [id], onDelete: Cascade)
+  sourceId   String?
+  source     DataSource? @relation(fields: [sourceId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([hospitalId, facilityId])
+  @@index([status])
+}
+
+model Specialization {
+  id   String @id @default(cuid())
+  key  String @unique
+  name String
+
+  hospitals HospitalSpecialization[]
+}
+
+model HospitalSpecialization {
+  id     String             @id @default(cuid())
+  status AvailabilityStatus @default(UNKNOWN)
+
+  hospitalId       String
+  hospital         Hospital       @relation(fields: [hospitalId], references: [id], onDelete: Cascade)
+  specializationId String
+  specialization   Specialization @relation(fields: [specializationId], references: [id], onDelete: Cascade)
+
+  verificationStatus VerificationStatus @default(NOT_VERIFIED)
+  lastVerifiedAt     DateTime?
+
+  @@unique([hospitalId, specializationId])
+}
+
+// ---------------------------------------------------------------------------
+// Insurance
+// ---------------------------------------------------------------------------
+
+model InsuranceProvider {
+  id       String  @id @default(cuid())
+  key      String  @unique
+  name     String
+  /// IRDAI registration number where known.
+  irdaiRegistrationNo String?
+  category String? /// "Standalone health insurer" | "General insurer" | "TPA"
+  website  String?
+
+  hospitals HospitalInsurance[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+/// A hospital appearing in an insurer's network is NOT the same as a given
+/// policy covering a given treatment. These enums keep the two apart, and the
+/// UI must never upgrade one into the other.
+enum NetworkStatus {
+  VERIFIED_NETWORK
+  VERIFIED_CASHLESS
+  NOT_IN_NETWORK
+  NOT_VERIFIED
+  UNKNOWN
+}
+
+model HospitalInsurance {
+  id            String        @id @default(cuid())
+  networkStatus NetworkStatus @default(UNKNOWN)
+  /// Cashless is a separate claim from being in-network, and needs its own
+  /// evidence. Being in a network does not imply cashless for every policy.
+  cashlessStatus NetworkStatus @default(UNKNOWN)
+  /// Third-party administrator, where the relationship runs through one.
+  tpa            String?
+
+  verificationStatus VerificationStatus @default(NOT_VERIFIED)
+  lastVerifiedAt     DateTime?
+  nextReviewAt       DateTime?
+  notes              String?
+
+  hospitalId String
+  hospital   Hospital @relation(fields: [hospitalId], references: [id], onDelete: Cascade)
+  providerId String
+  provider   InsuranceProvider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  sourceId   String?
+  source     DataSource? @relation(fields: [sourceId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([hospitalId, providerId])
+  @@index([networkStatus])
+}
+
+// ---------------------------------------------------------------------------
+// Government schemes
+// ---------------------------------------------------------------------------
+
+model GovernmentScheme {
+  id          String  @id @default(cuid())
+  key         String  @unique
+  schemeName  String
+  shortName   String?
+  operator    String? /// e.g. "Government of Tamil Nadu"
+  description String?
+
+  eligibility       String?
+  incomeCriteria    String?
+  ageCriteria       String?
+  coverage          String?
+  coveredTreatments String?
+  financialLimit    String?
+  documentsRequired String?
+  applicationMethod String?
+  officialWebsite   String?
+
+  verificationStatus VerificationStatus @default(NOT_VERIFIED)
+  lastVerifiedAt     DateTime?
+  nextReviewAt       DateTime?
+
+  sourceId String?
+  source   DataSource? @relation(fields: [sourceId], references: [id])
+
+  hospitals HospitalScheme[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum EmpanelmentStatus {
+  VERIFIED_EMPANELLED
+  NOT_EMPANELLED
+  UNKNOWN
+}
+
+/// Hospital empanelment under a government scheme. This is the one
+/// hospital-to-cover relationship that is genuinely publishable, because the
+/// schemes themselves publish their empanelled hospital lists.
+model HospitalScheme {
+  id     String            @id @default(cuid())
+  status EmpanelmentStatus @default(UNKNOWN)
+
+  verificationStatus VerificationStatus @default(NOT_VERIFIED)
+  lastVerifiedAt     DateTime?
+  notes              String?
+
+  hospitalId String
+  hospital   Hospital @relation(fields: [hospitalId], references: [id], onDelete: Cascade)
+  schemeId   String
+  scheme     GovernmentScheme @relation(fields: [schemeId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([hospitalId, schemeId])
+}
+
+// ---------------------------------------------------------------------------
+// Blood banks
+// ---------------------------------------------------------------------------
+
+/// Static directory information only.
+///
+/// This model deliberately has NO inventory fields. Whether a given blood
+/// group or platelet unit is available right now is real-time data, and
+/// storing a stale number here would be dangerous. Real-time stock must be
+/// fetched live from e-RaktKosh at query time, or not shown at all.
+model BloodBank {
+  id           String  @id @default(cuid())
+  slug         String  @unique
+  name         String
+  /// Parent hospital, where the blood bank sits inside one.
+  hospitalName String?
+  category     String? /// e.g. "Government", "Private", "Charitable"
+
+  address String?
+  area    String?
+  city    String  @default("Chennai")
+  state   String  @default("Tamil Nadu")
+  pincode String?
+  phone   String?
+  email   String?
+  website String?
+
+  /// Components the centre is licensed to handle, e.g. "Whole Blood, Platelets".
+  /// Licensing is static; availability is not.
+  bloodComponents String?
+  operatingHours  String?
+
+  latitude  Float?
+  longitude Float?
+
+  verificationStatus VerificationStatus @default(NOT_VERIFIED)
+  lastVerifiedAt     DateTime?
+  nextReviewAt       DateTime?
+
+  hospitalId String?
+  hospital   Hospital?   @relation(fields: [hospitalId], references: [id])
+  sourceId   String?
+  source     DataSource? @relation(fields: [sourceId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([city])
+}
+
+// ---------------------------------------------------------------------------
+// Operations
+// ---------------------------------------------------------------------------
+
+enum ReviewReason {
+  MISSING_REQUIRED_FIELD
+  UNVERIFIED_VALUE
+  CONFLICTING_SOURCES
+  POSSIBLE_DUPLICATE
+  STALE_RECORD
+  FAILED_VALIDATION
+}
+
+/// The manual verification queue: things a human needs to check, usually by
+/// phoning the hospital. Generated by the importer rather than hand-written.
+model VerificationTask {
+  id         String       @id @default(cuid())
+  entityType String
+  entityId   String?
+  entityName String
+  field      String
+  currentValue String?
+  reason     ReviewReason
+  detail     String?
+  sourceKey  String?
+  resolved   Boolean      @default(false)
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  @@index([resolved, reason])
+}
+
+/// One row per importer run, so data provenance includes when it was loaded.
+model ImportRun {
+  id            String   @id @default(cuid())
+  startedAt     DateTime @default(now())
+  finishedAt    DateTime?
+  datasetKey    String
+  recordsRead   Int      @default(0)
+  recordsUpserted Int    @default(0)
+  recordsSkipped Int     @default(0)
+  errors        Int      @default(0)
+  report        String?
+}

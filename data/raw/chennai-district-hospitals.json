@@ -1,0 +1,36 @@
+{
+  "source": {
+    "id": "chennai-district-portal",
+    "name": "Chennai District official public utilities directory — Hospitals",
+    "organization": "Chennai District Administration, Government of Tamil Nadu",
+    "sourceType": "GOVERNMENT",
+    "url": "https://chennai.nic.in/public-utility-category/hospitals/",
+    "reliability": "HIGH",
+    "collectedAt": "2026-08-28",
+    "notes": "Scraped from the district portal's paginated hospital directory (3 pages). Name, address, phone and Govt/Pvt classification are published by the district administration. Facilities, coordinates and insurance are NOT published here and remain UNKNOWN."
+  },
+  "records": [
+    { "name": "Apollo Hospital", "address": "NO. 21, Greams Lane, Chennai - 600 006", "phone": "044-28290200", "type": "Pvt Hospital" },
+    { "name": "Billroth Hospital", "address": "No. 43, Lakshmi Talkies Road, Shenoy Nagar, Chennai - 600 030", "phone": "26641777", "type": "Pvt Hospital" },
+    { "name": "C.S.I. Kalyani Hospital", "address": "NO. 15, Dr. Radhakrishan Salai, Mylapore, Chennai - 600 004", "phone": "28476433", "type": "Pvt Hospital" },
+    { "name": "Dr. Mehtas Hospital", "address": "No. 2, McNichols Road, 3rd Lane, Chetpet, Chennai - 31", "phone": "42271001", "type": null },
+    { "name": "Fortis Malar Hospital", "address": "No. 52, 1st Main Road, Gandhi Nagar, Adyar, Chennai - 600 020", "phone": "044-42892222", "type": "Pvt Hospital" },
+    { "name": "Government General Hospital", "address": "Poonamallee High Road, Park Town, Chennai-600003", "phone": "044-25305000", "type": "Govt Hospital" },
+    { "name": "Government Kilpauk Hospital", "address": "Kilpauk, Chennai - 600 010", "phone": "044-28364951", "type": "Govt Hospital" },
+    { "name": "Govt Hospital for Thoracic Medicine", "address": "Tambaram Sanatorium, Chennai - 47", "phone": "044-22418450", "type": "Govt Hospital" },
+    { "name": "Govt Kasturba Hospital for Women", "address": "Triplicane, Chennai - 600 005", "phone": "044-28545449", "type": "Govt Hospital" },
+    { "name": "Govt Multi Super Speciality Hospital", "address": "Omandurar Govt. Estate, Chennai - 600 002", "phone": "044-25666000", "type": "Govt Hospital" },
+    { "name": "Govt Royapettah Hospital", "address": "No. 1, West Cott Road, Chennai - 600 014", "phone": "044-28483051", "type": "Govt Hospital" },
+    { "name": "Govt Stanley Hospital", "address": "Old Jail Road, Chennai - 600 001", "phone": "044-25281347", "type": "Govt Hospital" },
+    { "name": "Institute of Child Health and Hospital for Children", "address": "Halls Road, Egmore, Chennai - 600 008", "phone": "044-28191135", "type": "Govt Hospital" },
+    { "name": "Madras Medical Mission Hospital", "address": "4-A, Dr. J. Jayalalitha Nagar, Mogappair, Chennai 600 037", "phone": "26565961", "type": "Pvt Hospital" },
+    { "name": "MIOT Hospital", "address": "4/112, Mount Poonamallee Road, Manappakkam, Chennai - 600 089", "phone": "22492288", "type": "Pvt Hospital" },
+    { "name": "R.S.R.M. Lying - In Hospital", "address": "Cemetry Road, Chennai - 600 013", "phone": "044-25902961", "type": "Govt Hospital" },
+    { "name": "Sankara Nethralaya", "address": "No. 18, College Road, Nungambakkam, Chennai - 600 006", "phone": "28271616", "type": "Pvt Hospital" },
+    { "name": "Sooriya Hospital", "address": "Kodambakkam Sriperumbudur Road, Vadapalani, Chennai - 26", "phone": "23761750", "type": "Pvt Hospital" },
+    { "name": "Sri Ramachandra Medical College and Research Centre", "address": "Porur, Chennai", "phone": "24768402", "type": "Pvt Hospital" },
+    { "name": "St. Isabella Hospital", "address": "Oliver Road, Mylapore Chennai 600 004", "phone": "24991081", "type": "Pvt Hospital" },
+    { "name": "Sundaram Medical Foundation", "address": "9C, Santhi Colony, 4th Avenue, Anna Nagar, Chennai - 600 040", "phone": "26268844", "type": "Pvt Hospital" },
+    { "name": "Vijaya Hospital", "address": "175 and 180 NSK Salai, Vadapalani, Chennai - 600 026", "phone": "24801642", "type": "Pvt Hospital" }
+  ]
+}

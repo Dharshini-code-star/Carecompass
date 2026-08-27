@@ -1,0 +1,50 @@
+{
+  "source": {
+    "key": "cmchis-official",
+    "name": "Chief Minister's Comprehensive Health Insurance Scheme — official portal",
+    "organization": "Government of Tamil Nadu",
+    "sourceType": "GOVERNMENT",
+    "url": "https://www.cmchistn.com/",
+    "reliability": "HIGH",
+    "authoritativeFor": "The existence, operator and official web presence of CMCHIS, and the list of hospitals empanelled under it.",
+    "collectedAt": "2026-08-28"
+  },
+  "records": [
+    {
+      "key": "cmchis",
+      "schemeName": "Chief Minister's Comprehensive Health Insurance Scheme",
+      "shortName": "CMCHIS",
+      "operator": "Government of Tamil Nadu",
+      "description": "Tamil Nadu's state health insurance scheme, administered by the Department of Health and Family Welfare. The scheme publishes its own list of empanelled hospitals.",
+      "officialWebsite": "https://www.cmchistn.com/",
+      "eligibility": null,
+      "incomeCriteria": null,
+      "ageCriteria": null,
+      "coverage": null,
+      "coveredTreatments": null,
+      "financialLimit": null,
+      "documentsRequired": null,
+      "applicationMethod": null,
+      "verificationStatus": "SOURCE_PROVIDED",
+      "notes": "Existence, operator and official URL confirmed from the scheme's own portal on 2026-08-28. Eligibility, income criteria, coverage limits and document lists are deliberately left null: they are policy details that change by government order, and publishing a stale figure could cause someone to wrongly believe they are or are not covered. Read them from the official portal."
+    },
+    {
+      "key": "pmjay",
+      "schemeName": "Ayushman Bharat Pradhan Mantri Jan Arogya Yojana",
+      "shortName": "AB-PMJAY",
+      "operator": "National Health Authority, Government of India",
+      "description": "The central government health assurance scheme. In Tamil Nadu it is implemented alongside CMCHIS, and the Tamil Nadu portal carries AB-PMJAY branding.",
+      "officialWebsite": "https://pmjay.gov.in/",
+      "eligibility": null,
+      "incomeCriteria": null,
+      "ageCriteria": null,
+      "coverage": null,
+      "coveredTreatments": null,
+      "financialLimit": null,
+      "documentsRequired": null,
+      "applicationMethod": null,
+      "verificationStatus": "SOURCE_PROVIDED",
+      "notes": "Recorded because the Government of Tamil Nadu's CMCHIS portal states it implements AB-PMJAY. Scheme parameters are left null for the same reason as CMCHIS: they are set centrally and change, and this project has not read them from an official source."
+    }
+  ]
+}
