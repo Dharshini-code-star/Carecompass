@@ -22,7 +22,9 @@ import type { PrismaClient } from "@prisma/client";
 
 import { createPrismaClient } from "./lib/db.ts";
 import {
+  findCrossSourceDuplicates,
   findDuplicateCandidates,
+  normalizeCmchisHospital,
   normalizeHospital,
   type NormalizedHospital,
   type ValidationIssue,
@@ -97,6 +99,8 @@ interface Report {
   errors: string[];
   issues: { hospital: string; issue: ValidationIssue }[];
   duplicates: { a: string; b: string; reason: string }[];
+  cmchisUpserted: number;
+  crossSourceDuplicates: { existingName: string; incomingName: string; sharedWords: string[] }[];
 }
 
 async function main() {
@@ -108,10 +112,12 @@ async function main() {
     errors: [],
     issues: [],
     duplicates: [],
+    cmchisUpserted: 0,
+    crossSourceDuplicates: [],
   };
 
   const run = await prisma.importRun.create({
-    data: { datasetKey: "chennai-initial" },
+    data: { datasetKey: "chennai-cmchis-second-source" },
   });
 
   try {
@@ -119,6 +125,7 @@ async function main() {
     const sourceId = await upsertHospitalSource(prisma);
     await importHospitals(prisma, sourceId, report);
     await importSchemes(prisma);
+    await importCmchisHospitals(prisma, report);
     await buildVerificationQueue(prisma, report);
 
     await prisma.importRun.update({
@@ -338,6 +345,172 @@ async function importSchemes(prisma: PrismaClient) {
 }
 
 /**
+ * Second source: CMCHIS empanelled hospitals.
+ *
+ * These are separate Hospital rows from the district-portal ones — CMCHIS
+ * publishes only name and type, never address or phone, so a CMCHIS-sourced
+ * row can never legitimately overwrite the richer district-portal fields.
+ * Slugs are namespaced ("cmchis-...") specifically so an upsert here can never
+ * collide with, and therefore can never silently overwrite, an existing
+ * district-portal row — see docs at the top of normalizeCmchisHospital.
+ *
+ * What this DOES establish with real confidence: that the hospital appears on
+ * the state government's own empanelment list, recorded as a HospitalScheme
+ * row with status VERIFIED_EMPANELLED. What it does NOT establish: address,
+ * phone, coordinates, or (for ~50 of the 62) ownership — those stay null/
+ * UNKNOWN and land in the verification queue like everything else unverified.
+ */
+async function importCmchisHospitals(prisma: PrismaClient, report: Report) {
+  const file = readJson("data/raw/cmchis-empanelled-hospitals.json");
+  const key = file.source.key!;
+
+  const source = await prisma.dataSource.upsert({
+    where: { key },
+    update: { lastCheckedAt: COLLECTED_AT },
+    create: {
+      key,
+      name: file.source.name,
+      organization: file.source.organization,
+      sourceType: "GOVERNMENT",
+      url: file.source.url,
+      reliability: "HIGH",
+      authoritativeFor: file.source.authoritativeFor,
+      notes: file.source.notes,
+      lastCheckedAt: COLLECTED_AT,
+    },
+  });
+
+  const cmchisScheme = await prisma.governmentScheme.findUnique({
+    where: { key: "cmchis" },
+  });
+  if (!cmchisScheme) {
+    throw new Error("CMCHIS GovernmentScheme row not found — importSchemes must run first");
+  }
+
+  // Existing hospitals, for cross-source duplicate-candidate detection only.
+  // This never merges anything; it only produces VerificationTask rows for a
+  // human to look at.
+  const existingHospitals = await prisma.hospital.findMany({
+    where: { sourceId: { not: source.id } },
+    select: { name: true },
+  });
+
+  const incoming = (file.records as { namePublished: string; type: string }[]).map(
+    (raw) => normalizeCmchisHospital(raw),
+  );
+
+  report.crossSourceDuplicates = findCrossSourceDuplicates(existingHospitals, incoming);
+
+  for (const record of incoming) {
+    const hospital = await prisma.hospital.upsert({
+      where: { slug: record.slug },
+      update: {
+        // Deliberately narrow: only what CMCHIS actually asserts. Address,
+        // phone, area and pincode are never touched here, so if a future run
+        // of this same importer somehow matched an existing richer row (it
+        // cannot, by construction of the namespaced slug), those fields would
+        // still never be at risk from this branch.
+        name: record.name,
+        ownership: record.ownership,
+        district: "Chennai",
+        verificationStatus: "SOURCE_PROVIDED",
+        lastVerifiedAt: COLLECTED_AT,
+        nextReviewAt: NEXT_REVIEW,
+        verificationNotes:
+          "Name and empanelment verified against the CMCHIS empanelled hospital list. CMCHIS does not publish address, phone or coordinates for this record.",
+      },
+      create: {
+        slug: record.slug,
+        name: record.name,
+        ownership: record.ownership,
+        district: "Chennai",
+        sourceId: source.id,
+        verificationStatus: "SOURCE_PROVIDED",
+        lastVerifiedAt: COLLECTED_AT,
+        nextReviewAt: NEXT_REVIEW,
+        verificationNotes:
+          "Name and empanelment verified against the CMCHIS empanelled hospital list. CMCHIS does not publish address, phone or coordinates for this record.",
+      },
+    });
+
+    report.cmchisUpserted++;
+
+    // Field-level evidence, scoped to exactly what CMCHIS asserts.
+    await prisma.dataEvidence.upsert({
+      where: {
+        entityType_entityId_field_sourceId: {
+          entityType: "Hospital",
+          entityId: hospital.id,
+          field: "name",
+          sourceId: source.id,
+        },
+      },
+      update: { value: record.name, checkedAt: COLLECTED_AT },
+      create: {
+        entityType: "Hospital",
+        entityId: hospital.id,
+        field: "name",
+        value: record.namePublished,
+        sourceUrl: file.source.url,
+        checkedAt: COLLECTED_AT,
+        sourceId: source.id,
+        notes: "Verbatim as published, before boilerplate suffix cleanup.",
+      },
+    });
+
+    if (record.ownership === "GOVERNMENT") {
+      await prisma.dataEvidence.upsert({
+        where: {
+          entityType_entityId_field_sourceId: {
+            entityType: "Hospital",
+            entityId: hospital.id,
+            field: "ownership",
+            sourceId: source.id,
+          },
+        },
+        update: { value: "GOVERNMENT", checkedAt: COLLECTED_AT },
+        create: {
+          entityType: "Hospital",
+          entityId: hospital.id,
+          field: "ownership",
+          value: "GOVERNMENT",
+          sourceUrl: file.source.url,
+          checkedAt: COLLECTED_AT,
+          sourceId: source.id,
+          notes:
+            "Inferred from the published name beginning with 'Govt' — CMCHIS did not provide a separate ownership field for this record.",
+        },
+      });
+    }
+
+    // The empanelment relationship itself: this is what CMCHIS's own list
+    // directly establishes, with high confidence.
+    await prisma.hospitalScheme.upsert({
+      where: { hospitalId_schemeId: { hospitalId: hospital.id, schemeId: cmchisScheme.id } },
+      update: {
+        status: "VERIFIED_EMPANELLED",
+        verificationStatus: "VERIFIED",
+        lastVerifiedAt: COLLECTED_AT,
+        sourceId: source.id,
+      },
+      create: {
+        hospitalId: hospital.id,
+        schemeId: cmchisScheme.id,
+        status: "VERIFIED_EMPANELLED",
+        verificationStatus: "VERIFIED",
+        lastVerifiedAt: COLLECTED_AT,
+        sourceId: source.id,
+        notes: "Hospital appears on CMCHIS's own published empanelment list.",
+      },
+    });
+  }
+
+  console.log(
+    `cmchis: ${report.cmchisUpserted} hospitals upserted, ${report.crossSourceDuplicates.length} cross-source duplicate candidates flagged`,
+  );
+}
+
+/**
  * Builds the manual follow-up queue.
  *
  * Every gap becomes a row someone can work through — by phoning the hospital,
@@ -379,6 +552,20 @@ async function buildVerificationQueue(prisma: PrismaClient, report: Report) {
       field: "identity",
       reason: "POSSIBLE_DUPLICATE",
       detail: pair.reason,
+    });
+  }
+
+  // Cross-source duplicate candidates: same institution named differently by
+  // the district portal and by CMCHIS. Flagged, never auto-merged — see
+  // findCrossSourceDuplicates for why.
+  for (const pair of report.crossSourceDuplicates) {
+    tasks.push({
+      entityType: "Hospital",
+      entityName: `${pair.existingName} / ${pair.incomingName}`,
+      field: "identity",
+      reason: "POSSIBLE_DUPLICATE",
+      detail: `District-portal record "${pair.existingName}" and CMCHIS record "${pair.incomingName}" share the word(s) [${pair.sharedWords.join(", ")}] — may be the same hospital named differently by the two sources. Not merged automatically.`,
+      sourceKey: "cmchis-empanelled-hospitals",
     });
   }
 
@@ -446,12 +633,14 @@ async function printReport(prisma: PrismaClient, report: Report) {
     govt,
     priv,
     unknownOwn,
+    bySourceRaw,
     facilities,
     hospitalFacilities,
     verifiedFacilities,
     insurances,
     bloodBanks,
     schemes,
+    empanelments,
     evidence,
     tasks,
     noPhone,
@@ -462,12 +651,17 @@ async function printReport(prisma: PrismaClient, report: Report) {
     prisma.hospital.count({ where: { ownership: "GOVERNMENT" } }),
     prisma.hospital.count({ where: { ownership: "PRIVATE" } }),
     prisma.hospital.count({ where: { ownership: "UNKNOWN" } }),
+    prisma.dataSource.findMany({
+      select: { key: true, name: true, _count: { select: { hospitals: true } } },
+      orderBy: { key: "asc" },
+    }),
     prisma.facility.count(),
     prisma.hospitalFacility.count(),
     prisma.hospitalFacility.count({ where: { status: "VERIFIED_AVAILABLE" } }),
     prisma.hospitalInsurance.count(),
     prisma.bloodBank.count(),
     prisma.governmentScheme.count(),
+    prisma.hospitalScheme.count({ where: { status: "VERIFIED_EMPANELLED" } }),
     prisma.dataEvidence.count(),
     prisma.verificationTask.count({ where: { resolved: false } }),
     prisma.hospital.count({ where: { phone: null } }),
@@ -481,6 +675,10 @@ async function printReport(prisma: PrismaClient, report: Report) {
   console.log(`  Government:                 ${govt}`);
   console.log(`  Private:                    ${priv}`);
   console.log(`  Ownership unknown:          ${unknownOwn}`);
+  console.log(`\nBy source:`);
+  for (const s of bySourceRaw) {
+    console.log(`  ${s.key.padEnd(28)} ${s._count.hospitals}`);
+  }
   console.log(`\nFacility catalogue entries:   ${facilities}`);
   console.log(`Hospital-facility records:    ${hospitalFacilities}`);
   console.log(`  Verified available:         ${verifiedFacilities}`);
@@ -488,11 +686,13 @@ async function printReport(prisma: PrismaClient, report: Report) {
   console.log(`\nInsurance relationships:      ${insurances}`);
   console.log(`Blood banks:                  ${bloodBanks}`);
   console.log(`Government schemes:           ${schemes}`);
+  console.log(`  Verified empanelments:      ${empanelments}`);
   console.log(`Field-level evidence rows:    ${evidence}`);
   console.log(`\nMissing phone numbers:        ${noPhone}`);
   console.log(`Missing coordinates:          ${noCoords}`);
   console.log(`Missing pincode:              ${noPincode}`);
-  console.log(`Duplicate candidates:         ${report.duplicates.length}`);
+  console.log(`Same-source duplicate candidates:   ${report.duplicates.length}`);
+  console.log(`Cross-source duplicate candidates:  ${report.crossSourceDuplicates.length}`);
   console.log(`\nManual verification tasks:    ${tasks}`);
   console.log(line);
 }

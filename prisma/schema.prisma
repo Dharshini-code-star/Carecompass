@@ -64,6 +64,7 @@ model DataSource {
   hospitals          Hospital[]
   hospitalFacilities HospitalFacility[]
   hospitalInsurances HospitalInsurance[]
+  hospitalSchemes    HospitalScheme[]
   bloodBanks         BloodBank[]
   schemes            GovernmentScheme[]
   evidence           DataEvidence[]
@@ -362,6 +363,8 @@ model HospitalScheme {
   hospital   Hospital @relation(fields: [hospitalId], references: [id], onDelete: Cascade)
   schemeId   String
   scheme     GovernmentScheme @relation(fields: [schemeId], references: [id], onDelete: Cascade)
+  sourceId   String?
+  source     DataSource? @relation(fields: [sourceId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -10,9 +10,12 @@ import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
 import {
+  cleanCmchisName,
   extractArea,
   extractPincode,
+  findCrossSourceDuplicates,
   findDuplicateCandidates,
+  normalizeCmchisHospital,
   normalizeHospital,
   normalizeOwnership,
   normalizePhone,
@@ -165,5 +168,113 @@ describe("slugify", () => {
   test("is stable and url-safe", () => {
     assert.equal(slugify("R.S.R.M. Lying - In Hospital"), "r-s-r-m-lying-in-hospital");
     assert.equal(slugify("Govt Multi Super Speciality Hospital"), "govt-multi-super-speciality-hospital");
+  });
+});
+
+describe("CMCHIS name cleaning", () => {
+  test("strips the trailing Chennai TN boilerplate", () => {
+    assert.equal(cleanCmchisName("Govt Puzhal CHC, Chennai TN."), "Govt Puzhal CHC");
+    assert.equal(cleanCmchisName("Vijaya Hospital,Chennai TN."), "Vijaya Hospital");
+  });
+
+  test("strips the Chennai DC variant", () => {
+    assert.equal(cleanCmchisName("Aarthi Scans kilpauk, Chennai DC."), "Aarthi Scans kilpauk");
+  });
+
+  test("leaves a name with no boilerplate unchanged", () => {
+    assert.equal(cleanCmchisName("Kauvery Hospital"), "Kauvery Hospital");
+  });
+});
+
+describe("CMCHIS ownership — read only from the name itself", () => {
+  test("a Govt-prefixed name is classified GOVERNMENT", () => {
+    const { ownership } = normalizeCmchisHospital({
+      namePublished: "Govt. Stanley Medical College Hospital,Chennai TN.",
+      type: "Multi",
+    });
+    assert.equal(ownership, "GOVERNMENT");
+  });
+
+  test("a name with no Govt marker is UNKNOWN, never assumed PRIVATE", () => {
+    const { ownership } = normalizeCmchisHospital({
+      namePublished: "Kauvery Hospital Chennai,TN.",
+      type: "Multi",
+    });
+    assert.equal(
+      ownership,
+      "UNKNOWN",
+      "CMCHIS does not publish a Directorate field for this record, so ownership must not be guessed",
+    );
+  });
+
+  test("slug is namespaced so it cannot collide with the district-portal source", () => {
+    const a = normalizeCmchisHospital({ namePublished: "Vijaya Hospital,Chennai TN.", type: "Multi" });
+    assert.equal(a.slug, "cmchis-vijaya-hospital");
+  });
+});
+
+describe("cross-source duplicate candidates", () => {
+  test("flags a likely match with different formatting, without merging it", () => {
+    const pairs = findCrossSourceDuplicates(
+      [{ name: "Govt Stanley Hospital" }],
+      [{ name: "Govt. Stanley Medical College Hospital" }],
+    );
+    assert.equal(pairs.length, 1);
+    assert.ok(pairs[0].sharedWords.includes("stanley"));
+  });
+
+  test("does not flag genuinely different institutions that share a stopworded word", () => {
+    const pairs = findCrossSourceDuplicates(
+      [{ name: "Madras Medical Mission Hospital" }],
+      [{ name: "Madras Medical College" }],
+    );
+    // "college" only appears on one side and "madras" is stopworded (it is a
+    // generic place qualifier, not evidence of identity) — no strong overlap.
+    assert.equal(pairs.length, 0);
+  });
+
+  test("returns nothing for names with no real overlap", () => {
+    const pairs = findCrossSourceDuplicates(
+      [{ name: "Apollo Hospital" }],
+      [{ name: "Fortis Malar Hospital" }],
+    );
+    assert.equal(pairs.length, 0);
+  });
+
+  test("a locality shared by several unrelated hospitals is not treated as identity evidence", () => {
+    // Regression test: this exact case (Kilpauk, a Chennai locality) produced
+    // false-positive matches against a fixed word-length threshold, because
+    // "kilpauk" is 7 characters — long enough to look distinctive on its own,
+    // even though four different, unrelated hospitals sit in that area.
+    const pairs = findCrossSourceDuplicates(
+      [{ name: "Government Kilpauk Hospital" }],
+      [
+        { name: "Kumaran Hospital Kilpauk" },
+        { name: "Murugan Hospital Kilpauk" },
+        { name: "Some Other Kilpauk Clinic" },
+      ],
+    );
+    assert.equal(
+      pairs.length,
+      0,
+      "kilpauk names four unrelated hospitals in this corpus, so it must not count as a match",
+    );
+  });
+
+  test("the same word is still strong evidence when only the true pair uses it", () => {
+    // Contrast case: "stanley" appears in exactly these two names and nowhere
+    // else in the corpus, which is what makes it real evidence. "Apollo" and
+    // "Fortis" are padding with no token overlap with anything, so they must
+    // contribute zero pairs on their own.
+    const pairs = findCrossSourceDuplicates(
+      [{ name: "Govt Stanley Hospital" }, { name: "Apollo Hospital" }],
+      [
+        { name: "Govt. Stanley Medical College Hospital" },
+        { name: "Fortis Malar Hospital" },
+      ],
+    );
+    assert.equal(pairs.length, 1);
+    assert.equal(pairs[0].existingName, "Govt Stanley Hospital");
+    assert.equal(pairs[0].incomingName, "Govt. Stanley Medical College Hospital");
   });
 });

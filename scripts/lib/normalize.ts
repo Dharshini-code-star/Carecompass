@@ -256,3 +256,123 @@ export function findDuplicateCandidates(
 
   return pairs;
 }
+
+/* --------------------------------- CMCHIS ---------------------------------- */
+
+/**
+ * CMCHIS publishes only a name and a type ("Multi", "Single", ...). There is
+ * no address, phone or Directorate field in the data actually collected (see
+ * data/raw/cmchis-empanelled-hospitals.json for why), so this normaliser
+ * extracts only what is genuinely there and is honest about the rest.
+ */
+export interface RawCmchisHospital {
+  namePublished: string;
+  type: string;
+}
+
+export interface NormalizedCmchisHospital {
+  slug: string;
+  name: string;
+  namePublished: string;
+  /**
+   * GOVERNMENT only when the published name itself says so (starts with
+   * "Govt"/"GOVT"/"Government") — a fact read directly off the string, not an
+   * inference from a classification field we do not have. Everything else is
+   * UNKNOWN rather than assumed private.
+   */
+  ownership: Ownership;
+}
+
+/** Strips the trailing "Chennai TN." / ", Chennai, TN." boilerplate CMCHIS appends. */
+export function cleanCmchisName(namePublished: string): string {
+  return namePublished
+    .replace(/,?\s*chennai\s*,?\s*tn\.?\s*,?\s*$/i, "")
+    .replace(/,?\s*chennai\s*dc\.?\s*$/i, "")
+    .replace(/\s+/g, " ")
+    .replace(/\s*,\s*$/, "")
+    .trim();
+}
+
+export function normalizeCmchisHospital(
+  raw: RawCmchisHospital,
+): NormalizedCmchisHospital {
+  const name = cleanCmchisName(raw.namePublished);
+  const ownership: Ownership = /^govt\.?\b/i.test(name) ? "GOVERNMENT" : "UNKNOWN";
+
+  return {
+    slug: slugify(`cmchis-${name}`),
+    name,
+    namePublished: raw.namePublished,
+    ownership,
+  };
+}
+
+/**
+ * Cross-source duplicate candidates.
+ *
+ * Two hospitals named by different sources rarely share a slug, because the
+ * sources format names differently ("Govt Stanley Hospital" vs "Govt. Stanley
+ * Medical College Hospital,Chennai TN."). Word-overlap catches the likely
+ * matches; it only ever produces a candidate for a human to look at — it
+ * never merges or overwrites anything.
+ */
+export function findCrossSourceDuplicates(
+  existing: { name: string }[],
+  incoming: { name: string }[],
+): { existingName: string; incomingName: string; sharedWords: string[] }[] {
+  // Generic institutional words. A fixed list catches the words that are
+  // *always* generic ("hospital", "govt"), but Chennai locality names
+  // ("Kilpauk", "Adyar", ...) are a much longer and open-ended list that
+  // cannot be hand-enumerated — a word like "kilpauk" is only generic because
+  // several unrelated hospitals happen to sit in that area, which the
+  // corpus-frequency check below catches without naming it here.
+  // "Madras" (the old name for Chennai) is a stopword on the same footing
+  // as "chennai" — real-world domain knowledge, not a guess — even though a
+  // small test corpus could not demonstrate its frequency is high in general.
+  const STOPWORDS = new Set([
+    "hospital", "hospitals", "the", "and", "for", "of", "chennai", "madras",
+    "govt", "government", "centre", "center", "medical", "college", "tn",
+  ]);
+
+  const tokenize = (name: string) =>
+    new Set(
+      name
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, " ")
+        .split(/\s+/)
+        .filter((word) => word.length > 2 && !STOPWORDS.has(word)),
+    );
+
+  const existingTokens = existing.map((h) => ({ name: h.name, tokens: tokenize(h.name) }));
+  const incomingTokens = incoming.map((h) => ({ name: h.name, tokens: tokenize(h.name) }));
+
+  // Document frequency: how many distinct institution names (across both
+  // sources together) contain each word. A word naming only one or two
+  // institutions is a real identifier ("royapettah", "stanley"); a word
+  // naming three or more is a shared qualifier ("kilpauk", the area, not the
+  // hospital) and must not count as evidence, however long it is.
+  const frequency = new Map<string, number>();
+  for (const { tokens } of [...existingTokens, ...incomingTokens]) {
+    for (const word of tokens) frequency.set(word, (frequency.get(word) ?? 0) + 1);
+  }
+  const isDistinctive = (word: string) => (frequency.get(word) ?? 0) <= 2;
+
+  const pairs: { existingName: string; incomingName: string; sharedWords: string[] }[] = [];
+
+  for (const inc of incomingTokens) {
+    if (inc.tokens.size === 0) continue;
+
+    for (const ex of existingTokens) {
+      const shared = [...inc.tokens].filter((word) => ex.tokens.has(word));
+      const distinctiveShared = shared.filter(isDistinctive);
+
+      // At least one shared word that names few enough institutions to be a
+      // real identifier, not a qualifier.
+      if (distinctiveShared.length > 0) {
+        pairs.push({ existingName: ex.name, incomingName: inc.name, sharedWords: shared });
+      }
+    }
+  }
+
+  return pairs;
+}
