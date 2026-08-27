@@ -52,7 +52,7 @@ export default async function HospitalDetailsPage(
     <div className="mx-auto max-w-3xl px-5 py-12 sm:px-6 sm:py-16">
       <Link
         href="/hospitals"
-        className="focus-ring rounded text-sm font-medium text-teal-800 hover:text-teal-900"
+        className="focus-ring rounded text-sm font-medium text-brand-700 hover:text-brand-800"
       >
         ← All hospitals
       </Link>
@@ -70,15 +70,15 @@ export default async function HospitalDetailsPage(
         />
       </div>
 
-      <div className="mt-5 rounded-md border border-slate-200 bg-slate-50 p-4">
+      <div className="mt-5 surface rounded-xl bg-white p-4">
         <ProvenanceNote provenance={hospital.provenance} />
 
-        <p className="mt-3 text-xs leading-relaxed text-slate-500">
+        <p className="mt-3 text-xs leading-relaxed text-ink-500">
           Name as published by the source:{" "}
           <span className="font-mono">{hospital.nameAsPublished}</span>
         </p>
 
-        <p className="mt-1 text-xs leading-relaxed text-slate-500">
+        <p className="mt-1 text-xs leading-relaxed text-ink-500">
           We tidy spacing and capitalisation for display, but never change the
           words.
         </p>
@@ -89,20 +89,20 @@ export default async function HospitalDetailsPage(
       <section aria-labelledby="details-heading" className="mt-12">
         <h2
           id="details-heading"
-          className="text-xl font-semibold tracking-tight text-slate-900"
+          className="text-xl font-semibold tracking-tight text-ink-900"
         >
           What we know
         </h2>
 
-        <p className="mt-3 leading-relaxed text-slate-600">
+        <p className="mt-3 leading-relaxed text-ink-600">
           Each field carries its own source. Where something could not be
           confirmed it says so, rather than being filled in with a guess.
         </p>
 
-        <dl className="mt-5 grid gap-px overflow-hidden rounded-md border border-slate-200 bg-slate-200">
+        <dl className="mt-5 surface grid gap-px overflow-hidden rounded-xl bg-ink-200">
           <div className="bg-white p-4 sm:p-5">
-            <dt className="text-sm text-slate-500">City and state</dt>
-            <dd className="mt-1 font-medium text-slate-900">
+            <dt className="text-sm text-ink-500">City and state</dt>
+            <dd className="mt-1 font-medium text-ink-900">
               {hospital.city}, {hospital.state}
             </dd>
             <ProvenanceNote provenance={hospital.provenance} className="mt-2" />
@@ -113,8 +113,8 @@ export default async function HospitalDetailsPage(
           <FactRow label="Street address" fact={hospital.address} />
 
           <div className="bg-white p-4 sm:p-5">
-            <dt className="text-sm text-slate-500">Hospital type</dt>
-            <dd className="mt-1 font-medium text-slate-900">
+            <dt className="text-sm text-ink-500">Hospital type</dt>
+            <dd className="mt-1 font-medium text-ink-900">
               {hospital.category} · {ownershipLabel}
             </dd>
             <ProvenanceNote provenance={hospital.provenance} className="mt-2" />
@@ -148,18 +148,18 @@ export default async function HospitalDetailsPage(
       <section aria-labelledby="cover-heading" className="mt-12">
         <h2
           id="cover-heading"
-          className="text-xl font-semibold tracking-tight text-slate-900"
+          className="text-xl font-semibold tracking-tight text-ink-900"
         >
           Insurance and network status
         </h2>
 
-        <p className="mt-3 leading-relaxed text-slate-600">
+        <p className="mt-3 leading-relaxed text-ink-600">
           Whether a product exists and whether a hospital accepts it are two
           separate facts. The second is only recorded when an official source
           establishes it.
         </p>
 
-        <h3 className="mt-6 text-sm font-semibold uppercase tracking-wider text-slate-500">
+        <h3 className="mt-6 text-sm font-semibold uppercase tracking-wider text-ink-500">
           Government schemes
         </h3>
 
@@ -172,17 +172,17 @@ export default async function HospitalDetailsPage(
               return (
                 <li
                   key={relationship.id}
-                  className="rounded-md border border-slate-200 p-4"
+                  className="surface rounded-xl p-4"
                 >
                   <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
-                    <p className="font-medium text-slate-900">
+                    <p className="font-medium text-ink-900">
                       {scheme.shortName} — empanelled
                     </p>
 
                     <VerificationBadge status={relationship.provenance.status} />
                   </div>
 
-                  <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                  <p className="mt-2 text-sm leading-relaxed text-ink-600">
                     {scheme.name}, {scheme.operator}. {scheme.description}
                   </p>
 
@@ -196,28 +196,28 @@ export default async function HospitalDetailsPage(
             })}
           </ul>
         ) : (
-          <p className="mt-3 text-slate-600">
+          <p className="mt-3 text-ink-600">
             No scheme empanelment is recorded for this hospital.
           </p>
         )}
 
-        <h3 className="mt-8 text-sm font-semibold uppercase tracking-wider text-slate-500">
+        <h3 className="mt-8 text-sm font-semibold uppercase tracking-wider text-ink-500">
           Private insurers
         </h3>
 
-        <p className="mt-3 leading-relaxed text-slate-600">
+        <p className="mt-3 leading-relaxed text-ink-600">
           Network status is <strong>Not verified</strong> for every private
           insurer at this hospital. No official network list has been read, so no
           claim is made either way — for or against.
         </p>
 
-        <ul className="mt-4 divide-y divide-slate-200 overflow-hidden rounded-md border border-slate-200">
+        <ul className="mt-4 surface divide-y divide-ink-200 overflow-hidden rounded-xl">
           {Object.values(INSURERS).map((insurer) => (
             <li
               key={insurer.id}
               className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 px-4 py-3 sm:px-5"
             >
-              <span className="text-sm text-slate-800">{insurer.name}</span>
+              <span className="text-sm text-ink-800">{insurer.name}</span>
               <VerificationBadge status="not-verified" />
             </li>
           ))}
@@ -244,7 +244,7 @@ export default async function HospitalDetailsPage(
 
       <Link
         href="/hospitals"
-        className="focus-ring mt-10 inline-block rounded text-sm font-medium text-teal-800 hover:text-teal-900"
+        className="focus-ring mt-10 inline-block rounded text-sm font-medium text-brand-700 hover:text-brand-800"
       >
         ← All hospitals
       </Link>

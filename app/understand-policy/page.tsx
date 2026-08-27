@@ -34,26 +34,26 @@ export default function UnderstandPolicyPage() {
       */}
       <section
         aria-labelledby="upload-heading"
-        className="mt-10 rounded-md border-2 border-dashed border-slate-300 p-6 sm:p-8"
+        className="mt-10 rounded-md border-2 border-dashed border-ink-300 p-6 sm:p-8"
       >
         <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
-          <h2 id="upload-heading" className="font-semibold text-slate-900">
+          <h2 id="upload-heading" className="font-semibold text-ink-900">
             Upload your policy document
           </h2>
 
-          <span className="rounded bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-900">
+          <span className="rounded bg-caution-100 px-2 py-0.5 text-xs font-medium text-caution-800">
             Not available yet
           </span>
         </div>
 
-        <p className="mt-3 max-w-2xl leading-relaxed text-slate-600">
+        <p className="mt-3 max-w-2xl leading-relaxed text-ink-600">
           The plan is to let you upload your own policy PDF and get a plain
           English summary of the same terms explained below — your actual sum
           insured, your room rent limit, your waiting periods — read out of your
           document rather than looked up in a table.
         </p>
 
-        <p className="mt-3 max-w-2xl leading-relaxed text-slate-600">
+        <p className="mt-3 max-w-2xl leading-relaxed text-ink-600">
           None of that is built. There is no upload, no document analysis and no
           AI reading anything here today. When it does exist, this page will say
           exactly what happens to your document and for how long it is kept.
@@ -67,12 +67,12 @@ export default function UnderstandPolicyPage() {
       <section aria-labelledby="terms-heading" className="mt-16">
         <h2
           id="terms-heading"
-          className="text-2xl font-semibold tracking-tight text-slate-900"
+          className="text-2xl font-semibold tracking-tight text-ink-900"
         >
           The terms that decide what you get paid
         </h2>
 
-        <p className="mt-3 leading-relaxed text-slate-600">
+        <p className="mt-3 leading-relaxed text-ink-600">
           You can read these in order, or jump to whichever term is confusing
           you right now.
         </p>
@@ -83,7 +83,7 @@ export default function UnderstandPolicyPage() {
               <li key={entry.id}>
                 <a
                   href={`#${entry.id}`}
-                  className="focus-ring rounded text-sm text-teal-800 underline underline-offset-4 hover:text-teal-900"
+                  className="focus-ring rounded text-sm text-brand-700 underline underline-offset-4 hover:text-brand-800"
                 >
                   {entry.term}
                 </a>
@@ -95,29 +95,29 @@ export default function UnderstandPolicyPage() {
         <div className="mt-8 space-y-10">
           {GLOSSARY.map((entry) => (
             <article key={entry.id} id={entry.id} className="scroll-mt-6">
-              <h3 className="text-lg font-semibold text-slate-900">
+              <h3 className="text-lg font-semibold text-ink-900">
                 {entry.term}
               </h3>
 
-              <p className="mt-2 leading-relaxed text-slate-700">
+              <p className="mt-2 leading-relaxed text-ink-700">
                 {entry.plainEnglish}
               </p>
 
-              <dl className="mt-4 space-y-3 border-l-2 border-slate-200 pl-4">
+              <dl className="mt-4 space-y-3 border-l-2 border-ink-200 pl-4">
                 <div>
-                  <dt className="text-sm font-medium text-slate-900">
+                  <dt className="text-sm font-medium text-ink-900">
                     Why it matters
                   </dt>
-                  <dd className="mt-1 text-sm leading-relaxed text-slate-600">
+                  <dd className="mt-1 text-sm leading-relaxed text-ink-600">
                     {entry.whyItMatters}
                   </dd>
                 </div>
 
                 <div>
-                  <dt className="text-sm font-medium text-slate-900">
+                  <dt className="text-sm font-medium text-ink-900">
                     For example
                   </dt>
-                  <dd className="mt-1 text-sm leading-relaxed text-slate-600">
+                  <dd className="mt-1 text-sm leading-relaxed text-ink-600">
                     {entry.example}
                   </dd>
                 </div>
@@ -140,14 +140,14 @@ export default function UnderstandPolicyPage() {
         </p>
       </Callout>
 
-      <section className="mt-12 rounded-md border border-slate-200 bg-slate-50 p-5 sm:p-6">
-        <h2 className="font-semibold text-slate-900">Next steps</h2>
+      <section className="mt-12 surface rounded-xl bg-white p-5 sm:p-6">
+        <h2 className="font-semibold text-ink-900">Next steps</h2>
 
         <ul className="mt-3 space-y-2 text-sm">
           <li>
             <Link
               href="/coverage-estimator"
-              className="focus-ring rounded font-medium text-teal-800 underline underline-offset-4 hover:text-teal-900"
+              className="focus-ring rounded font-medium text-brand-700 underline underline-offset-4 hover:text-brand-800"
             >
               See how these numbers change a real bill
             </Link>
@@ -155,7 +155,7 @@ export default function UnderstandPolicyPage() {
           <li>
             <Link
               href="/demo-policies"
-              className="focus-ring rounded font-medium text-teal-800 underline underline-offset-4 hover:text-teal-900"
+              className="focus-ring rounded font-medium text-brand-700 underline underline-offset-4 hover:text-brand-800"
             >
               Read worked examples written in this structure
             </Link>
@@ -163,7 +163,7 @@ export default function UnderstandPolicyPage() {
           <li>
             <Link
               href="/claims"
-              className="focus-ring rounded font-medium text-teal-800 underline underline-offset-4 hover:text-teal-900"
+              className="focus-ring rounded font-medium text-brand-700 underline underline-offset-4 hover:text-brand-800"
             >
               Find out how to actually make a claim
             </Link>

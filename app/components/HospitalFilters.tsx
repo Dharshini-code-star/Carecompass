@@ -36,9 +36,9 @@ export default function HospitalFilters({ query }: { query: HospitalQuery }) {
       autoComplete="off"
       action="/hospitals"
       aria-labelledby="filters-heading"
-      className="rounded-md border border-slate-200 bg-slate-50 p-5 sm:p-6"
+      className="surface rounded-xl bg-white p-5 sm:p-6"
     >
-      <h2 id="filters-heading" className="text-base font-semibold text-slate-900">
+      <h2 id="filters-heading" className="text-base font-semibold text-ink-900">
         Narrow the list
       </h2>
 

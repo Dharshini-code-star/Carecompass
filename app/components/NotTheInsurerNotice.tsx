@@ -30,7 +30,7 @@ export default function NotTheInsurerNotice({
         the hospital before you rely on it.{" "}
         <Link
           href="/trust"
-          className="focus-ring rounded font-medium underline underline-offset-2 hover:text-amber-950"
+          className="focus-ring rounded font-medium underline underline-offset-2 hover:text-caution-800"
         >
           How we source and label data
         </Link>

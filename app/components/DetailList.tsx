@@ -14,16 +14,16 @@ export interface Detail {
 export default function DetailList({ items }: { items: Detail[] }) {
   return (
     <dl
-      className="grid gap-px overflow-hidden rounded-md border border-slate-200 bg-slate-200 sm:grid-cols-2"
+      className="surface grid gap-px overflow-hidden rounded-xl bg-ink-200 sm:grid-cols-2"
     >
       {items.map((item) => (
         <div key={item.label} className="bg-white p-4 sm:p-5">
-          <dt className="text-sm text-slate-500">{item.label}</dt>
+          <dt className="text-sm text-ink-500">{item.label}</dt>
 
-          <dd className="mt-1 font-medium text-slate-900">{item.value}</dd>
+          <dd className="mt-1 font-medium text-ink-900">{item.value}</dd>
 
           {item.hint ? (
-            <p className="mt-1.5 text-sm leading-relaxed text-slate-500">
+            <p className="mt-1.5 text-sm leading-relaxed text-ink-500">
               {item.hint}
             </p>
           ) : null}

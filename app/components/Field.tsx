@@ -4,12 +4,12 @@
  * a label or a control looks the same wherever it appears.
  */
 
-export const FIELD_LABEL = "block text-sm font-medium text-slate-800";
+export const FIELD_LABEL = "block text-sm font-semibold text-ink-800";
 
 export const FIELD_CONTROL =
-  "focus-ring mt-1.5 block min-h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-base text-slate-900 sm:text-sm";
+  "focus-ring mt-2 block min-h-11 w-full rounded-lg border border-ink-300 bg-white px-3.5 text-base text-ink-900 shadow-xs transition-colors placeholder:text-ink-500 hover:border-ink-400 sm:text-sm";
 
-export const FIELD_HINT = "mt-1.5 text-sm text-slate-500";
+export const FIELD_HINT = "mt-2 text-sm leading-relaxed text-ink-500";
 
 export interface SelectOption<T extends string> {
   value: T;
@@ -78,7 +78,7 @@ export function CheckboxField({
     // the box itself is 24px — the smallest target size WCAG 2.5.8 allows.
     <label
       htmlFor={id}
-      className="flex min-h-11 cursor-pointer items-center gap-3 text-sm font-medium text-slate-800"
+      className="flex min-h-11 cursor-pointer items-center gap-3 text-sm font-medium text-ink-800"
     >
       <input
         type="checkbox"
@@ -86,7 +86,7 @@ export function CheckboxField({
         name={name}
         value="1"
         defaultChecked={defaultChecked}
-        className="focus-ring h-6 w-6 shrink-0 rounded border-slate-400 accent-teal-800"
+        className="focus-ring h-6 w-6 shrink-0 rounded-md border-ink-400 accent-brand-600"
       />
 
       <span>{label}</span>

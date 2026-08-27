@@ -1,16 +1,18 @@
 import Link from "next/link";
 import type { ComponentProps } from "react";
 
-type Variant = "primary" | "secondary";
+type Variant = "primary" | "secondary" | "ghost";
 
 const BASE =
-  "focus-ring inline-flex min-h-11 items-center justify-center rounded-md px-4 text-sm font-medium transition-colors";
+  "focus-ring inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-4 text-sm font-semibold transition-all duration-150 active:translate-y-px";
 
 const VARIANTS: Record<Variant, string> = {
   primary:
-    "bg-teal-800 text-white hover:bg-teal-900 disabled:bg-slate-200 disabled:text-slate-600",
+    "bg-brand-600 text-white shadow-sm hover:bg-brand-700 hover:shadow-md disabled:bg-ink-200 disabled:text-ink-500 disabled:shadow-none",
   secondary:
-    "border border-slate-300 bg-white text-slate-800 hover:border-slate-400 hover:bg-slate-50 disabled:border-slate-200 disabled:text-slate-400",
+    "border border-ink-300 bg-white text-ink-800 shadow-xs hover:border-ink-400 hover:bg-ink-50 hover:shadow-sm disabled:border-ink-200 disabled:text-ink-400 disabled:shadow-none",
+  ghost:
+    "text-ink-700 hover:bg-ink-100 hover:text-ink-900 disabled:text-ink-400",
 };
 
 function classes(variant: Variant, className?: string) {
@@ -26,7 +28,7 @@ export function Button({
   return (
     <button
       type={type}
-      className={`${classes(variant, className)} disabled:cursor-not-allowed`}
+      className={`${classes(variant, className)} disabled:cursor-not-allowed disabled:active:translate-y-0`}
       {...props}
     />
   );

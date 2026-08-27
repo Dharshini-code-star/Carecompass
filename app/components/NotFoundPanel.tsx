@@ -20,7 +20,7 @@ export default function NotFoundPanel({
           <li key={link.href}>
             <Link
               href={link.href}
-              className="focus-ring rounded font-medium text-teal-800 underline underline-offset-4 hover:text-teal-900"
+              className="focus-ring rounded font-medium text-brand-700 underline underline-offset-4 hover:text-brand-800"
             >
               {link.label}
             </Link>

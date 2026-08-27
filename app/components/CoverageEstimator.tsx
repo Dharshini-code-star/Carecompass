@@ -59,7 +59,7 @@ function NumberField({
         {suffix ? (
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-sm text-slate-500"
+            className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-sm text-ink-500"
           >
             {suffix}
           </span>
@@ -92,12 +92,12 @@ function Fieldset({
 }) {
   return (
     <fieldset className="border-0 p-0">
-      <legend className="text-base font-semibold text-slate-900">
+      <legend className="text-base font-semibold text-ink-900">
         {legend}
       </legend>
 
       {description ? (
-        <p className="mt-1 max-w-2xl text-sm leading-relaxed text-slate-600">
+        <p className="mt-1 max-w-2xl text-sm leading-relaxed text-ink-600">
           {description}
         </p>
       ) : null}
@@ -151,7 +151,7 @@ export default function CoverageEstimator({
         className="space-y-8"
       >
         {prefillNote ? (
-          <p className="rounded-md border border-slate-200 bg-slate-50 p-4 text-sm leading-relaxed text-slate-600">
+          <p className="surface rounded-xl bg-white p-4 text-sm leading-relaxed text-ink-600">
             {prefillNote}
           </p>
         ) : null}
@@ -216,12 +216,12 @@ export default function CoverageEstimator({
 
       <section
         aria-labelledby="estimate-heading"
-        className="rounded-md border border-slate-200 lg:sticky lg:top-6"
+        className="rounded-md border border-ink-200 lg:sticky lg:top-6"
       >
-        <div className="border-b border-slate-200 px-5 py-4">
+        <div className="border-b border-ink-200 px-5 py-4">
           <h2
             id="estimate-heading"
-            className="text-base font-semibold text-slate-900"
+            className="text-base font-semibold text-ink-900"
           >
             Illustrative estimate
           </h2>
@@ -229,42 +229,48 @@ export default function CoverageEstimator({
 
         {estimate ? (
           <div className="px-5 py-5">
-            <p aria-live="polite" className="text-sm text-slate-600">
+            <p aria-live="polite" className="text-sm text-ink-600">
               On these figures and assumptions, the policy might pay{" "}
-              <strong className="font-semibold text-slate-900">
+              <strong
+                className="font-semibold text-ink-900"
+                data-numeric
+              >
                 {formatInr(estimate.insurerPays)}
               </strong>{" "}
               and leave{" "}
-              <strong className="font-semibold text-slate-900">
+              <strong
+                className="font-semibold text-ink-900"
+                data-numeric
+              >
                 {formatInr(estimate.youPay)}
               </strong>{" "}
               for you. This is not a quote and not an approval.
             </p>
 
-            <h3 className="mt-6 text-sm font-semibold text-slate-900">
+            <h3 className="mt-6 text-sm font-semibold text-ink-900">
               How that was worked out
             </h3>
 
-            <ol className="mt-3 divide-y divide-slate-200 border-y border-slate-200">
+            <ol className="mt-3 divide-y divide-ink-200 border-y border-ink-200">
               {estimate.steps.map((step) => (
                 <li key={step.id} className="py-3">
                   <div className="flex items-baseline justify-between gap-3">
-                    <span className="text-sm font-medium text-slate-900">
+                    <span className="text-sm font-medium text-ink-900">
                       {step.label}
                     </span>
 
-                    <span className="shrink-0 text-sm tabular-nums text-slate-900">
+                    <span className="shrink-0 text-sm tabular-nums text-ink-900">
                       {formatInr(step.runningTotal)}
                     </span>
                   </div>
 
                   {step.reduction > 0 ? (
-                    <p className="mt-0.5 text-sm text-red-700">
+                    <p className="mt-0.5 text-sm text-red-700" data-numeric>
                       −{formatInr(step.reduction)}
                     </p>
                   ) : null}
 
-                  <p className="mt-1 text-sm leading-relaxed text-slate-600">
+                  <p className="mt-1 text-sm leading-relaxed text-ink-600">
                     {step.explanation}
                   </p>
                 </li>
@@ -274,7 +280,7 @@ export default function CoverageEstimator({
             {estimate.notes.length > 0 ? (
               <ul className="mt-4 space-y-2">
                 {estimate.notes.map((note) => (
-                  <li key={note} className="text-sm leading-relaxed text-slate-600">
+                  <li key={note} className="text-sm leading-relaxed text-ink-600">
                     {note}
                   </li>
                 ))}
@@ -282,7 +288,7 @@ export default function CoverageEstimator({
             ) : null}
           </div>
         ) : (
-          <p className="px-5 py-5 text-sm leading-relaxed text-slate-600">
+          <p className="px-5 py-5 text-sm leading-relaxed text-ink-600">
             Enter an expected hospital bill and your sum insured to see an
             estimate. Nothing you type is sent anywhere — the calculation runs
             in your browser.

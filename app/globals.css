@@ -1,10 +1,69 @@
 @import "tailwindcss";
 
 /*
- * InsureGuide uses a single light theme on purpose: the product is read by
- * people who are often stressed or in a hurry, and one high-contrast surface
- * is easier to keep consistent and legible than two.
+ * InsureGuide's design language: clinical warmth.
+ *
+ * The product is read by people who are stressed, often on a phone, sometimes
+ * standing at a hospital counter. So: one light theme, warm neutrals rather
+ * than cold blue-greys (they read as human rather than corporate), a deep
+ * considered teal for trust, and depth used sparingly to establish hierarchy
+ * rather than for decoration.
+ *
+ * Every colour pair below is checked to meet WCAG AA against the surface it is
+ * used on. Nothing here is chosen only because it looks nice.
  */
+
+@theme {
+  /* Warm neutral ramp. Reads more human than slate for a health product. */
+  --color-ink-50: #faf9f7;
+  --color-ink-100: #f3f1ed;
+  --color-ink-200: #e7e3dc;
+  --color-ink-300: #d4cec4;
+  --color-ink-400: #a9a196;
+  --color-ink-500: #756d62;
+  --color-ink-600: #5b544b;
+  --color-ink-700: #443e37;
+  --color-ink-800: #2c2823;
+  --color-ink-900: #1a1714;
+
+  /* Deep teal. Medical without being clinical-cold; carries the brand. */
+  --color-brand-50: #eff6f5;
+  --color-brand-100: #d7eae7;
+  --color-brand-200: #afd5cf;
+  --color-brand-300: #7db8b0;
+  --color-brand-400: #4a958c;
+  --color-brand-500: #2e7a70;
+  --color-brand-600: #1f6259;
+  --color-brand-700: #1a4e47;
+  --color-brand-800: #163e39;
+  --color-brand-900: #12312d;
+
+  /* Caution / demo data. Warm, serious, not alarming. */
+  --color-caution-50: #fdf8ed;
+  --color-caution-100: #faeecf;
+  --color-caution-200: #f3da9e;
+  --color-caution-300: #e5bc63;
+  --color-caution-600: #8f6414;
+  --color-caution-700: #74510f;
+  --color-caution-800: #5c400c;
+
+  /* Source-provided. Distinct from "verified" without shouting. */
+  --color-cite-50: #eff5fb;
+  --color-cite-100: #d8e7f5;
+  --color-cite-200: #b0cdea;
+  --color-cite-600: #2c6296;
+  --color-cite-700: #23507c;
+
+  /* Layered elevation. Tinted with the ink hue so shadows never look grey. */
+  --shadow-xs: 0 1px 2px 0 rgb(26 23 20 / 0.04);
+  --shadow-sm:
+    0 1px 3px 0 rgb(26 23 20 / 0.05), 0 1px 2px -1px rgb(26 23 20 / 0.04);
+  --shadow-md:
+    0 2px 6px -1px rgb(26 23 20 / 0.06), 0 4px 12px -2px rgb(26 23 20 / 0.05);
+  --shadow-lg:
+    0 8px 24px -4px rgb(26 23 20 / 0.08), 0 2px 8px -2px rgb(26 23 20 / 0.05);
+}
+
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -20,28 +79,108 @@
     html {
       scroll-behavior: auto;
     }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 
   body {
-    background-color: #ffffff;
-    color: var(--color-slate-700);
+    background-color: var(--color-ink-50);
+    color: var(--color-ink-600);
     font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Headings carry the brand voice: tight, confident, never shouty. */
+  h1,
+  h2,
+  h3 {
+    color: var(--color-ink-900);
+    letter-spacing: -0.021em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: var(--color-brand-100);
+    color: var(--color-brand-900);
+  }
+
+  /* Figures line up in columns wherever money or dates are shown. */
+  [data-numeric] {
+    font-variant-numeric: tabular-nums;
   }
 }
 
 @layer components {
   /*
-   * One focus treatment for every interactive element. `outline` is used
-   * instead of a box-shadow ring so it follows border radii and stays visible
-   * in Windows high-contrast mode.
+   * One focus treatment for every interactive element. `outline` rather than a
+   * box-shadow ring, so it follows border radii and survives Windows
+   * high-contrast mode.
    */
   .focus-ring:focus {
     outline: none;
   }
 
   .focus-ring:focus-visible {
-    outline: 2px solid var(--color-teal-700);
+    outline: 2px solid var(--color-brand-600);
     outline-offset: 2px;
+  }
+
+  /* The standard raised surface: a white card on the warm canvas. */
+  .surface {
+    background-color: #ffffff;
+    border: 1px solid var(--color-ink-200);
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* A surface that responds to being clickable. */
+  .surface-interactive {
+    background-color: #ffffff;
+    border: 1px solid var(--color-ink-200);
+    box-shadow: var(--shadow-sm);
+    transition:
+      box-shadow 160ms ease,
+      border-color 160ms ease,
+      transform 160ms ease;
+  }
+
+  .surface-interactive:hover {
+    border-color: var(--color-brand-200);
+    box-shadow: var(--shadow-md);
+  }
+
+  /*
+   * The hero wash: a barely-there radial tint that gives the top of the page
+   * some depth without becoming a decorative gradient.
+   */
+  .hero-wash {
+    background-image:
+      radial-gradient(
+        ellipse 80% 60% at 12% -10%,
+        var(--color-brand-100) 0%,
+        transparent 60%
+      ),
+      radial-gradient(
+        ellipse 60% 50% at 95% 0%,
+        var(--color-caution-100) 0%,
+        transparent 55%
+      );
+  }
+
+  /* Small-caps metadata label, used for eyebrows and field labels. */
+  .label-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 }

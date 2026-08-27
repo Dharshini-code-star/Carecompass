@@ -69,11 +69,11 @@ export default async function InsurancePage(props: PageProps<"/insurance">) {
         action="/insurance"
         autoComplete="off"
         aria-labelledby="filter-heading"
-        className="mt-10 rounded-md border border-slate-200 bg-slate-50 p-5 sm:p-6"
+        className="mt-10 surface rounded-xl bg-white p-5 sm:p-6"
       >
         <h2
           id="filter-heading"
-          className="text-base font-semibold text-slate-900"
+          className="text-base font-semibold text-ink-900"
         >
           Filter by insurer
         </h2>
@@ -102,24 +102,24 @@ export default async function InsurancePage(props: PageProps<"/insurance">) {
           Products
         </h2>
 
-        <p aria-live="polite" className="text-sm text-slate-600">
+        <p aria-live="polite" className="text-sm text-ink-600">
           {products.length === 1
             ? "1 product matches."
             : `${products.length} products ${insurer === "any" ? "in the dataset" : "match"}.`}
         </p>
 
         {products.length > 0 ? (
-          <ul className="mt-4 divide-y divide-slate-200 overflow-hidden rounded-md border border-slate-200">
+          <ul className="mt-4 surface divide-y divide-ink-200 overflow-hidden rounded-xl">
             {products.map((product) => (
               <ProductListItem key={product.id} product={product} />
             ))}
           </ul>
         ) : (
-          <div className="mt-4 rounded-md border border-dashed border-slate-300 p-8">
-            <h3 className="font-semibold text-slate-900">
+          <div className="mt-4 rounded-xl border border-dashed border-ink-300 bg-white p-8">
+            <h3 className="font-semibold text-ink-900">
               No products from that insurer in this dataset
             </h3>
-            <p className="mt-2 text-sm leading-relaxed text-slate-600">
+            <p className="mt-2 text-sm leading-relaxed text-ink-600">
               This is a small selection from IRDAI&apos;s database, not every
               product it lists.
             </p>
@@ -132,18 +132,18 @@ export default async function InsurancePage(props: PageProps<"/insurance">) {
 
       <section
         aria-labelledby="source-heading"
-        className="mt-12 rounded-md border border-slate-200 bg-slate-50 p-5 sm:p-6"
+        className="mt-12 surface rounded-xl bg-white p-5 sm:p-6"
       >
-        <h2 id="source-heading" className="font-semibold text-slate-900">
+        <h2 id="source-heading" className="font-semibold text-ink-900">
           Where this comes from
         </h2>
 
-        <p className="mt-2 text-sm leading-relaxed text-slate-600">
+        <p className="mt-2 text-sm leading-relaxed text-ink-600">
           {source.name}, published by {source.publisher}.{" "}
           {source.authoritativeFor}
         </p>
 
-        <p className="mt-3 text-sm leading-relaxed text-slate-600">
+        <p className="mt-3 text-sm leading-relaxed text-ink-600">
           Records were only kept where the policy document IRDAI hosts is named
           after the same UIN as the row it appears in — a few rows in that table
           link to a document belonging to a different product, and those were
@@ -155,7 +155,7 @@ export default async function InsurancePage(props: PageProps<"/insurance">) {
             href={source.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="focus-ring mt-4 inline-block rounded text-sm font-medium text-teal-800 underline underline-offset-4 hover:text-teal-900"
+            className="focus-ring mt-4 inline-block rounded text-sm font-medium text-brand-700 underline underline-offset-4 hover:text-brand-800"
           >
             Search the IRDAI database yourself
           </a>
@@ -165,12 +165,12 @@ export default async function InsurancePage(props: PageProps<"/insurance">) {
       <section aria-labelledby="demo-heading" className="mt-12">
         <h2
           id="demo-heading"
-          className="text-xl font-semibold tracking-tight text-slate-900"
+          className="text-xl font-semibold tracking-tight text-ink-900"
         >
           Teaching examples
         </h2>
 
-        <p className="mt-3 leading-relaxed text-slate-600">
+        <p className="mt-3 leading-relaxed text-ink-600">
           Because real products are shown as facts and links rather than copied
           figures, there is nothing here to practise reading. A separate set of{" "}
           <strong>invented</strong> policies carries figures so the structure of a
@@ -181,21 +181,21 @@ export default async function InsurancePage(props: PageProps<"/insurance">) {
         <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm">
           <Link
             href="/demo-policies"
-            className="focus-ring rounded font-medium text-teal-800 underline underline-offset-4 hover:text-teal-900"
+            className="focus-ring rounded font-medium text-brand-700 underline underline-offset-4 hover:text-brand-800"
           >
             See the teaching examples
           </Link>
 
           <Link
             href="/understand-policy"
-            className="focus-ring rounded font-medium text-teal-800 underline underline-offset-4 hover:text-teal-900"
+            className="focus-ring rounded font-medium text-brand-700 underline underline-offset-4 hover:text-brand-800"
           >
             What the terms mean
           </Link>
 
           <Link
             href="/coverage-estimator"
-            className="focus-ring rounded font-medium text-teal-800 underline underline-offset-4 hover:text-teal-900"
+            className="focus-ring rounded font-medium text-brand-700 underline underline-offset-4 hover:text-brand-800"
           >
             Try the coverage estimator
           </Link>

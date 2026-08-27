@@ -55,7 +55,7 @@ export default async function CoverageEstimatorPage(
   const prefill = await prefillFromPolicy(policyId);
 
   return (
-    <div className="mx-auto max-w-6xl px-5 py-12 sm:px-6 sm:py-16">
+    <div className="mx-auto max-w-6xl px-5 py-12 sm:px-8 sm:py-16">
       <PageHeader
         eyebrow="Illustrative only"
         title="Coverage estimator"
@@ -100,20 +100,20 @@ export default async function CoverageEstimatorPage(
 
       <section
         aria-labelledby="order-heading"
-        className="mt-16 max-w-3xl rounded-md border border-slate-200 bg-slate-50 p-5 sm:p-6"
+        className="mt-16 max-w-3xl surface rounded-xl bg-white p-5 sm:p-6"
       >
-        <h2 id="order-heading" className="font-semibold text-slate-900">
+        <h2 id="order-heading" className="font-semibold text-ink-900">
           The order used here
         </h2>
 
-        <p className="mt-2 text-sm leading-relaxed text-slate-600">
+        <p className="mt-2 text-sm leading-relaxed text-ink-600">
           The bill has the room rent limit applied first, then the deductible,
           then the co-payment, and the result is capped at the sum insured. Most
           Indian health policies work in roughly this order, but yours may
           differ — and the order changes the final figure.
         </p>
 
-        <p className="mt-3 text-sm leading-relaxed text-slate-600">
+        <p className="mt-3 text-sm leading-relaxed text-ink-600">
           Where a room costs more per night than the policy allows, many
           policies also reduce other treatment charges in the same proportion.
           That is included here, because it is the step that most often
@@ -123,14 +123,14 @@ export default async function CoverageEstimatorPage(
         <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm">
           <Link
             href="/understand-policy"
-            className="focus-ring rounded font-medium text-teal-800 underline underline-offset-4 hover:text-teal-900"
+            className="focus-ring rounded font-medium text-brand-700 underline underline-offset-4 hover:text-brand-800"
           >
             What these terms mean
           </Link>
 
           <Link
             href="/demo-policies"
-            className="focus-ring rounded font-medium text-teal-800 underline underline-offset-4 hover:text-teal-900"
+            className="focus-ring rounded font-medium text-brand-700 underline underline-offset-4 hover:text-brand-800"
           >
             Try it with a teaching example
           </Link>

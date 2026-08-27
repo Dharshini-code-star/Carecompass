@@ -36,24 +36,24 @@ export default async function DemoPoliciesPage() {
           Demo policies
         </h2>
 
-        <ul className="divide-y divide-slate-200 overflow-hidden rounded-md border border-slate-200">
+        <ul className="surface divide-y divide-ink-200 overflow-hidden rounded-xl">
           {policies.map((policy) => (
             <PolicyListItem key={policy.id} policy={policy} />
           ))}
         </ul>
       </section>
 
-      <section className="mt-12 rounded-md border border-slate-200 bg-slate-50 p-5 sm:p-6">
-        <h2 className="font-semibold text-slate-900">Looking for real products?</h2>
+      <section className="mt-12 surface rounded-xl bg-white p-5 sm:p-6">
+        <h2 className="font-semibold text-ink-900">Looking for real products?</h2>
 
-        <p className="mt-2 text-sm leading-relaxed text-slate-600">
+        <p className="mt-2 text-sm leading-relaxed text-ink-600">
           Real, IRDAI-listed products are shown with their UIN and a link to the
           actual policy wording.
         </p>
 
         <Link
           href="/insurance"
-          className="focus-ring mt-4 inline-block rounded text-sm font-medium text-teal-800 underline underline-offset-4 hover:text-teal-900"
+          className="focus-ring mt-4 inline-block rounded text-sm font-medium text-brand-700 underline underline-offset-4 hover:text-brand-800"
         >
           Explore real insurance products
         </Link>

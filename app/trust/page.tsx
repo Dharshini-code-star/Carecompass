@@ -112,26 +112,26 @@ export default function TrustPage() {
       <section aria-labelledby="datasets-heading" className="mt-12">
         <h2
           id="datasets-heading"
-          className="text-2xl font-semibold tracking-tight text-slate-900"
+          className="text-2xl font-semibold tracking-tight text-ink-900"
         >
           What is in the app
         </h2>
 
-        <ul className="mt-5 divide-y divide-slate-200 overflow-hidden rounded-md border border-slate-200">
+        <ul className="mt-5 surface divide-y divide-ink-200 overflow-hidden rounded-xl">
           {DATASETS.map((dataset) => (
             <li key={dataset.name} className="px-4 py-4 sm:px-5">
               <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
                 <Link
                   href={dataset.href}
-                  className="focus-ring rounded font-semibold text-slate-900 underline underline-offset-4"
+                  className="focus-ring rounded font-semibold text-ink-900 underline underline-offset-4"
                 >
                   {dataset.name}
                 </Link>
 
-                <span className="text-sm text-slate-600">{dataset.count}</span>
+                <span className="text-sm text-ink-600">{dataset.count}</span>
               </div>
 
-              <p className="mt-1 text-sm text-slate-600">{dataset.status}</p>
+              <p className="mt-1 text-sm text-ink-600">{dataset.status}</p>
             </li>
           ))}
         </ul>
@@ -140,12 +140,12 @@ export default function TrustPage() {
       <section aria-labelledby="labels-heading" className="mt-16">
         <h2
           id="labels-heading"
-          className="text-2xl font-semibold tracking-tight text-slate-900"
+          className="text-2xl font-semibold tracking-tight text-ink-900"
         >
           What the four labels mean
         </h2>
 
-        <p className="mt-3 leading-relaxed text-slate-600">
+        <p className="mt-3 leading-relaxed text-ink-600">
           Every record, and in places every individual field, carries one of
           these. They are stored with the record itself, so the same fact is
           never labelled one way in a list and another way on a detail page.
@@ -157,7 +157,7 @@ export default function TrustPage() {
               <dt>
                 <VerificationBadge status={status} />
               </dt>
-              <dd className="mt-2 text-sm leading-relaxed text-slate-600">
+              <dd className="mt-2 text-sm leading-relaxed text-ink-600">
                 {VERIFICATION_MEANINGS[status]}
               </dd>
             </div>
@@ -168,12 +168,12 @@ export default function TrustPage() {
       <section aria-labelledby="sources-heading" className="mt-16">
         <h2
           id="sources-heading"
-          className="text-2xl font-semibold tracking-tight text-slate-900"
+          className="text-2xl font-semibold tracking-tight text-ink-900"
         >
           The sources we cite
         </h2>
 
-        <p className="mt-3 leading-relaxed text-slate-600">
+        <p className="mt-3 leading-relaxed text-ink-600">
           A source is only added here when it is authoritative for the kind of
           fact it is used for. Directories, review sites, aggregators and blogs
           are not used for factual records.
@@ -186,14 +186,14 @@ export default function TrustPage() {
             return (
               <li
                 key={id}
-                className="rounded-md border border-slate-200 p-4 sm:p-5"
+                className="surface rounded-xl p-4 sm:p-5"
               >
-                <h3 className="font-semibold text-slate-900">{source.name}</h3>
+                <h3 className="font-semibold text-ink-900">{source.name}</h3>
 
-                <p className="mt-1 text-sm text-slate-600">{source.publisher}</p>
+                <p className="mt-1 text-sm text-ink-600">{source.publisher}</p>
 
-                <p className="mt-2 text-sm leading-relaxed text-slate-600">
-                  <span className="font-medium text-slate-800">
+                <p className="mt-2 text-sm leading-relaxed text-ink-600">
+                  <span className="font-medium text-ink-800">
                     Used for:{" "}
                   </span>
                   {source.authoritativeFor}
@@ -204,7 +204,7 @@ export default function TrustPage() {
                     href={source.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="focus-ring mt-3 inline-block break-all rounded text-sm font-medium text-teal-800 underline underline-offset-4 hover:text-teal-900"
+                    className="focus-ring mt-3 inline-block break-all rounded text-sm font-medium text-brand-700 underline underline-offset-4 hover:text-brand-800"
                   >
                     {source.url}
                   </a>
@@ -218,12 +218,12 @@ export default function TrustPage() {
       <section aria-labelledby="unverified-heading" className="mt-16">
         <h2
           id="unverified-heading"
-          className="text-2xl font-semibold tracking-tight text-slate-900"
+          className="text-2xl font-semibold tracking-tight text-ink-900"
         >
           What is still not verified
         </h2>
 
-        <p className="mt-3 leading-relaxed text-slate-600">
+        <p className="mt-3 leading-relaxed text-ink-600">
           This is the part most products leave out. Everything below is a known
           gap, stated on purpose.
         </p>
@@ -231,8 +231,8 @@ export default function TrustPage() {
         <dl className="mt-6 space-y-5">
           {NOT_VERIFIED.map((item) => (
             <div key={item.what}>
-              <dt className="font-medium text-slate-900">{item.what}</dt>
-              <dd className="mt-1 text-sm leading-relaxed text-slate-600">
+              <dt className="font-medium text-ink-900">{item.what}</dt>
+              <dd className="mt-1 text-sm leading-relaxed text-ink-600">
                 {item.why}
               </dd>
             </div>
@@ -243,7 +243,7 @@ export default function TrustPage() {
       <section aria-labelledby="rules-heading" className="mt-16">
         <h2
           id="rules-heading"
-          className="text-2xl font-semibold tracking-tight text-slate-900"
+          className="text-2xl font-semibold tracking-tight text-ink-900"
         >
           Rules we hold ourselves to
         </h2>
@@ -252,7 +252,7 @@ export default function TrustPage() {
           {RULES.map((rule) => (
             <li
               key={rule}
-              className="rounded-md border border-slate-200 px-4 py-3 leading-relaxed text-slate-700"
+              className="surface rounded-xl px-4 py-3 leading-relaxed text-ink-700"
             >
               {rule}
             </li>
@@ -263,12 +263,12 @@ export default function TrustPage() {
       <section aria-labelledby="privacy-heading" className="mt-16">
         <h2
           id="privacy-heading"
-          className="text-2xl font-semibold tracking-tight text-slate-900"
+          className="text-2xl font-semibold tracking-tight text-ink-900"
         >
           What happens to what you type
         </h2>
 
-        <p className="mt-3 leading-relaxed text-slate-600">
+        <p className="mt-3 leading-relaxed text-ink-600">
           Nothing. There is no account, no login, and no server storing anything.
           The coverage estimator runs entirely in your browser and the figures you
           enter are never sent anywhere. Policy document upload does not exist

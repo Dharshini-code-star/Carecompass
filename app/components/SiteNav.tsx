@@ -10,14 +10,15 @@ export interface NavItem {
 
 /**
  * Client-side only so the current section can be marked with `aria-current`,
- * which is how screen reader and keyboard users know where they are.
+ * which is how screen reader and keyboard users know where they are. The
+ * active pill is the visual half of the same signal.
  */
 export default function SiteNav({ items }: { items: NavItem[] }) {
   const pathname = usePathname();
 
   return (
     <nav aria-label="Main">
-      <ul className="flex flex-wrap gap-x-5 gap-y-1 text-sm">
+      <ul className="flex flex-wrap items-center gap-x-1 gap-y-1 text-sm">
         {items.map((item) => {
           const isCurrent =
             pathname === item.href || pathname.startsWith(`${item.href}/`);
@@ -27,10 +28,10 @@ export default function SiteNav({ items }: { items: NavItem[] }) {
               <Link
                 href={item.href}
                 aria-current={isCurrent ? "page" : undefined}
-                className={`focus-ring inline-block rounded py-1 transition-colors ${
+                className={`focus-ring inline-block rounded-lg px-3 py-2 font-medium transition-colors ${
                   isCurrent
-                    ? "font-medium text-slate-900"
-                    : "text-slate-600 hover:text-slate-900"
+                    ? "bg-brand-100/70 text-brand-800"
+                    : "text-ink-600 hover:bg-ink-100 hover:text-ink-900"
                 }`}
               >
                 {item.label}

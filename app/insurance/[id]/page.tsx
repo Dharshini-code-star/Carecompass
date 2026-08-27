@@ -46,7 +46,7 @@ export default async function ProductDetailsPage(
     <div className="mx-auto max-w-3xl px-5 py-12 sm:px-6 sm:py-16">
       <Link
         href="/insurance"
-        className="focus-ring rounded text-sm font-medium text-teal-800 hover:text-teal-900"
+        className="focus-ring rounded text-sm font-medium text-brand-700 hover:text-brand-800"
       >
         ← All products
       </Link>
@@ -59,7 +59,7 @@ export default async function ProductDetailsPage(
         />
       </div>
 
-      <div className="mt-5 rounded-md border border-slate-200 bg-slate-50 p-4">
+      <div className="mt-5 surface rounded-xl bg-white p-4">
         <ProvenanceNote provenance={product.provenance} />
       </div>
 
@@ -68,12 +68,12 @@ export default async function ProductDetailsPage(
       <section aria-labelledby="registry-heading" className="mt-12">
         <h2
           id="registry-heading"
-          className="text-xl font-semibold tracking-tight text-slate-900"
+          className="text-xl font-semibold tracking-tight text-ink-900"
         >
           Regulatory record
         </h2>
 
-        <p className="mt-3 leading-relaxed text-slate-600">
+        <p className="mt-3 leading-relaxed text-ink-600">
           These are the facts the regulator publishes about this product. The
           UIN is the number to quote when you ask an insurer or agent about it —
           it identifies the exact product and version.
@@ -103,7 +103,7 @@ export default async function ProductDetailsPage(
               {
                 label: "IRDAI product type",
                 value: product.irdaiProductTypeLabel ?? (
-                  <span className="text-slate-500">Not recorded</span>
+                  <span className="text-ink-500">Not recorded</span>
                 ),
                 hint:
                   product.irdaiProductTypeLabel === null
@@ -113,7 +113,7 @@ export default async function ProductDetailsPage(
               {
                 label: "Financial year of filing",
                 value: product.financialYear ?? (
-                  <span className="text-slate-500">Not recorded</span>
+                  <span className="text-ink-500">Not recorded</span>
                 ),
               },
             ]}
@@ -124,12 +124,12 @@ export default async function ProductDetailsPage(
       <section aria-labelledby="document-heading" className="mt-12">
         <h2
           id="document-heading"
-          className="text-xl font-semibold tracking-tight text-slate-900"
+          className="text-xl font-semibold tracking-tight text-ink-900"
         >
           The policy wording
         </h2>
 
-        <p className="mt-3 leading-relaxed text-slate-600">
+        <p className="mt-3 leading-relaxed text-ink-600">
           Everything that decides what this policy pays — sum insured options,
           room rent limits, waiting periods, co-payment, sub-limits and
           exclusions — is in this document, not in our database. It is the
@@ -140,7 +140,7 @@ export default async function ProductDetailsPage(
           href={product.policyDocumentUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="focus-ring mt-5 inline-flex min-h-11 items-center rounded-md bg-teal-800 px-4 text-sm font-medium text-white transition-colors hover:bg-teal-900"
+          className="focus-ring mt-5 inline-flex min-h-11 items-center rounded-md bg-brand-600 px-4 text-sm font-medium text-white transition-colors hover:bg-brand-700"
         >
           Open the policy document (PDF, on irdai.gov.in)
         </a>
@@ -159,20 +159,20 @@ export default async function ProductDetailsPage(
       <section aria-labelledby="network-heading" className="mt-12">
         <h2
           id="network-heading"
-          className="text-xl font-semibold tracking-tight text-slate-900"
+          className="text-xl font-semibold tracking-tight text-ink-900"
         >
           Which hospitals accept it
         </h2>
 
-        <div className="mt-4 rounded-md border border-slate-200 p-5">
+        <div className="mt-4 surface rounded-xl p-5">
           <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
-            <p className="font-medium text-slate-900">
+            <p className="font-medium text-ink-900">
               Network status at every hospital
             </p>
             <VerificationBadge status="not-verified" />
           </div>
 
-          <p className="mt-3 text-sm leading-relaxed text-slate-600">
+          <p className="mt-3 text-sm leading-relaxed text-ink-600">
             We do not publish a hospital network for this product, and we will
             not guess one. Network lists are set per insurer and can differ
             between two policies from the same insurer, they change without
@@ -180,7 +180,7 @@ export default async function ProductDetailsPage(
             money.
           </p>
 
-          <p className="mt-3 text-sm leading-relaxed text-slate-600">
+          <p className="mt-3 text-sm leading-relaxed text-ink-600">
             Ask {product.insurer.name} directly, quoting UIN {product.uin} and
             your policy number, and confirm again with the hospital&apos;s
             insurance desk before admission.
@@ -190,14 +190,14 @@ export default async function ProductDetailsPage(
         <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm">
           <Link
             href="/hospitals"
-            className="focus-ring rounded font-medium text-teal-800 underline underline-offset-4 hover:text-teal-900"
+            className="focus-ring rounded font-medium text-brand-700 underline underline-offset-4 hover:text-brand-800"
           >
             Browse Chennai hospitals
           </Link>
 
           <Link
             href="/claims"
-            className="focus-ring rounded font-medium text-teal-800 underline underline-offset-4 hover:text-teal-900"
+            className="focus-ring rounded font-medium text-brand-700 underline underline-offset-4 hover:text-brand-800"
           >
             How cashless and reimbursement work
           </Link>
@@ -206,13 +206,13 @@ export default async function ProductDetailsPage(
 
       <section
         aria-labelledby="source-heading"
-        className="mt-12 rounded-md border border-slate-200 bg-slate-50 p-5 sm:p-6"
+        className="mt-12 surface rounded-xl bg-white p-5 sm:p-6"
       >
-        <h2 id="source-heading" className="font-semibold text-slate-900">
+        <h2 id="source-heading" className="font-semibold text-ink-900">
           Source
         </h2>
 
-        <p className="mt-2 text-sm leading-relaxed text-slate-600">
+        <p className="mt-2 text-sm leading-relaxed text-ink-600">
           {irdai.name}, {irdai.publisher}.
         </p>
 
@@ -221,7 +221,7 @@ export default async function ProductDetailsPage(
             href={irdai.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="focus-ring mt-3 inline-block rounded text-sm font-medium text-teal-800 underline underline-offset-4 hover:text-teal-900"
+            className="focus-ring mt-3 inline-block rounded text-sm font-medium text-brand-700 underline underline-offset-4 hover:text-brand-800"
           >
             Look this UIN up yourself
           </a>
@@ -230,7 +230,7 @@ export default async function ProductDetailsPage(
 
       <Link
         href="/insurance"
-        className="focus-ring mt-10 inline-block rounded text-sm font-medium text-teal-800 hover:text-teal-900"
+        className="focus-ring mt-10 inline-block rounded text-sm font-medium text-brand-700 hover:text-brand-800"
       >
         ← All products
       </Link>

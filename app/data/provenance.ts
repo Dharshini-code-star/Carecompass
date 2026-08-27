@@ -39,10 +39,18 @@ export const VERIFICATION_MEANINGS: Record<VerificationStatus, string> = {
  * page can never drift apart in how they colour the same status.
  */
 export const VERIFICATION_TONES: Record<VerificationStatus, string> = {
-  verified: "bg-teal-50 text-teal-900 border-teal-200",
-  "source-provided": "bg-sky-50 text-sky-900 border-sky-200",
-  "not-verified": "bg-slate-100 text-slate-700 border-slate-300",
-  demo: "bg-amber-50 text-amber-900 border-amber-300",
+  verified: "border-brand-200 bg-brand-50 text-brand-800",
+  "source-provided": "border-cite-200 bg-cite-50 text-cite-700",
+  "not-verified": "border-ink-300 bg-ink-100 text-ink-700",
+  demo: "border-caution-200 bg-caution-50 text-caution-800",
+};
+
+/** The dot colour inside a badge. Kept beside the tones so they cannot drift. */
+export const VERIFICATION_DOTS: Record<VerificationStatus, string> = {
+  verified: "bg-brand-500",
+  "source-provided": "bg-cite-600",
+  "not-verified": "bg-ink-400",
+  demo: "bg-caution-300",
 };
 
 export interface Provenance {

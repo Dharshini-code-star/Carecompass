@@ -27,7 +27,7 @@ export default function DemoDataNotice({
         see{" "}
         <Link
           href="/insurance"
-          className="focus-ring rounded font-medium underline underline-offset-2 hover:text-amber-950"
+          className="focus-ring rounded font-medium underline underline-offset-2 hover:text-caution-800"
         >
           the IRDAI-listed products
         </Link>

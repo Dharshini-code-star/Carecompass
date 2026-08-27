@@ -40,7 +40,7 @@ export default async function HospitalsPage(props: PageProps<"/hospitals">) {
   const source = getSource("cmchis-empanelled-hospitals");
 
   return (
-    <div className="mx-auto max-w-5xl px-5 py-12 sm:px-6 sm:py-16">
+    <div className="mx-auto max-w-6xl px-5 py-12 sm:px-8 sm:py-16">
       <PageHeader
         eyebrow="Chennai, Tamil Nadu"
         title="Find a hospital"
@@ -92,23 +92,23 @@ export default async function HospitalsPage(props: PageProps<"/hospitals">) {
           Results
         </h2>
 
-        <p aria-live="polite" className="text-sm text-slate-600">
+        <p aria-live="polite" className="text-sm text-ink-600">
           {summarise(results.length, filters)}
         </p>
 
         {results.length > 0 ? (
-          <ul className="mt-4 divide-y divide-slate-200 overflow-hidden rounded-md border border-slate-200">
+          <ul className="mt-4 surface divide-y divide-ink-200 overflow-hidden rounded-xl">
             {results.map((hospital) => (
               <HospitalListItem key={hospital.id} hospital={hospital} />
             ))}
           </ul>
         ) : (
-          <div className="mt-4 rounded-md border border-dashed border-slate-300 p-8">
-            <h3 className="font-semibold text-slate-900">
+          <div className="mt-4 rounded-xl border border-dashed border-ink-300 bg-white p-8">
+            <h3 className="font-semibold text-ink-900">
               No hospitals in this dataset match those filters
             </h3>
 
-            <p className="mt-2 max-w-xl text-sm leading-relaxed text-slate-600">
+            <p className="mt-2 max-w-xl text-sm leading-relaxed text-ink-600">
               This dataset holds {TOTAL_REAL_HOSPITALS} Chennai hospitals from
               one government list — it is not every hospital in the city. A
               hospital missing from here has not been ruled out; it simply is not
@@ -124,12 +124,12 @@ export default async function HospitalsPage(props: PageProps<"/hospitals">) {
         )}
       </section>
 
-      <section className="mt-12 max-w-3xl rounded-md border border-slate-200 bg-slate-50 p-5 sm:p-6">
-        <h2 className="font-semibold text-slate-900">
+      <section className="mt-12 max-w-3xl surface rounded-xl bg-white p-5 sm:p-6">
+        <h2 className="font-semibold text-ink-900">
           Where this list comes from
         </h2>
 
-        <p className="mt-2 text-sm leading-relaxed text-slate-600">
+        <p className="mt-2 text-sm leading-relaxed text-ink-600">
           {source.name}, published by {source.publisher}.{" "}
           {source.authoritativeFor}
         </p>
@@ -140,7 +140,7 @@ export default async function HospitalsPage(props: PageProps<"/hospitals">) {
               href={source.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="focus-ring rounded font-medium text-teal-800 underline underline-offset-4 hover:text-teal-900"
+              className="focus-ring rounded font-medium text-brand-700 underline underline-offset-4 hover:text-brand-800"
             >
               Read the official list
             </a>
@@ -148,14 +148,14 @@ export default async function HospitalsPage(props: PageProps<"/hospitals">) {
 
           <Link
             href="/trust"
-            className="focus-ring rounded font-medium text-teal-800 underline underline-offset-4 hover:text-teal-900"
+            className="focus-ring rounded font-medium text-brand-700 underline underline-offset-4 hover:text-brand-800"
           >
             How we label data
           </Link>
 
           <Link
             href="/claims"
-            className="focus-ring rounded font-medium text-teal-800 underline underline-offset-4 hover:text-teal-900"
+            className="focus-ring rounded font-medium text-brand-700 underline underline-offset-4 hover:text-brand-800"
           >
             What to ask before admission
           </Link>

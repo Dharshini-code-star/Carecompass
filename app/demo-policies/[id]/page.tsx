@@ -52,7 +52,7 @@ export default async function DemoPolicyPage(
     <div className="mx-auto max-w-3xl px-5 py-12 sm:px-6 sm:py-16">
       <Link
         href="/demo-policies"
-        className="focus-ring rounded text-sm font-medium text-teal-800 hover:text-teal-900"
+        className="focus-ring rounded text-sm font-medium text-brand-700 hover:text-brand-800"
       >
         ← All teaching examples
       </Link>
@@ -70,7 +70,7 @@ export default async function DemoPolicyPage(
         />
       </div>
 
-      <div className="mt-5 rounded-md border border-slate-200 bg-slate-50 p-4">
+      <div className="mt-5 surface rounded-xl bg-white p-4">
         <ProvenanceNote provenance={policy.provenance} />
       </div>
 
@@ -79,12 +79,12 @@ export default async function DemoPolicyPage(
       <section aria-labelledby="numbers-heading" className="mt-12">
         <h2
           id="numbers-heading"
-          className="text-xl font-semibold tracking-tight text-slate-900"
+          className="text-xl font-semibold tracking-tight text-ink-900"
         >
           The numbers that decide what gets paid
         </h2>
 
-        <p className="mt-3 leading-relaxed text-slate-600">
+        <p className="mt-3 leading-relaxed text-ink-600">
           These four settings do most of the work in any health policy. Read them
           together — a large sum insured can still pay out little if the room
           rent limit is low.
@@ -125,7 +125,7 @@ export default async function DemoPolicyPage(
 
         <Link
           href={`/coverage-estimator?policy=${policy.id}`}
-          className="focus-ring mt-5 inline-block rounded font-medium text-teal-800 underline underline-offset-4 hover:text-teal-900"
+          className="focus-ring mt-5 inline-block rounded font-medium text-brand-700 underline underline-offset-4 hover:text-brand-800"
         >
           Work these figures through the coverage estimator
         </Link>
@@ -134,25 +134,25 @@ export default async function DemoPolicyPage(
       <section aria-labelledby="waiting-heading" className="mt-12">
         <h2
           id="waiting-heading"
-          className="text-xl font-semibold tracking-tight text-slate-900"
+          className="text-xl font-semibold tracking-tight text-ink-900"
         >
           Waiting periods
         </h2>
 
-        <p className="mt-3 leading-relaxed text-slate-600">
+        <p className="mt-3 leading-relaxed text-ink-600">
           {plainEnglish("waiting-period")} A claim made before the relevant
           waiting period has finished is usually declined, even though the policy
           itself is perfectly valid.
         </p>
 
-        <dl className="mt-5 divide-y divide-slate-200 overflow-hidden rounded-md border border-slate-200">
+        <dl className="mt-5 surface divide-y divide-ink-200 overflow-hidden rounded-xl">
           {policy.waitingPeriods.map((period) => (
             <div
               key={period.label}
               className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-4 py-3 sm:px-5"
             >
-              <dt className="text-slate-700">{period.label}</dt>
-              <dd className="font-medium text-slate-900">{period.duration}</dd>
+              <dt className="text-ink-700">{period.label}</dt>
+              <dd className="font-medium text-ink-900">{period.duration}</dd>
             </div>
           ))}
         </dl>
@@ -161,12 +161,12 @@ export default async function DemoPolicyPage(
       <section aria-labelledby="exclusions-heading" className="mt-12">
         <h2
           id="exclusions-heading"
-          className="text-xl font-semibold tracking-tight text-slate-900"
+          className="text-xl font-semibold tracking-tight text-ink-900"
         >
           What this example does not pay for
         </h2>
 
-        <p className="mt-3 leading-relaxed text-slate-600">
+        <p className="mt-3 leading-relaxed text-ink-600">
           {plainEnglish("exclusions")} No waiting period changes an exclusion.
         </p>
 
@@ -174,7 +174,7 @@ export default async function DemoPolicyPage(
           {policy.exclusions.map((exclusion) => (
             <li
               key={exclusion}
-              className="rounded-md border border-slate-200 px-4 py-3 text-slate-700"
+              className="surface rounded-xl px-4 py-3 text-ink-700"
             >
               {exclusion}
             </li>
@@ -206,7 +206,7 @@ export default async function DemoPolicyPage(
 
       <Link
         href="/demo-policies"
-        className="focus-ring mt-10 inline-block rounded text-sm font-medium text-teal-800 hover:text-teal-900"
+        className="focus-ring mt-10 inline-block rounded text-sm font-medium text-brand-700 hover:text-brand-800"
       >
         ← All teaching examples
       </Link>

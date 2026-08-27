@@ -22,9 +22,9 @@ export default function FactRow<T>({
 
   return (
     <div className="bg-white p-4 sm:p-5">
-      <dt className="text-sm text-slate-500">{label}</dt>
+      <dt className="text-sm text-ink-500">{label}</dt>
 
-      <dd className="mt-1 font-medium text-slate-900">
+      <dd className="mt-1 font-medium text-ink-900">
         {known ? (
           render ? (
             render(fact.value as T)
@@ -32,7 +32,7 @@ export default function FactRow<T>({
             String(fact.value)
           )
         ) : (
-          <span className="text-slate-500">Not verified</span>
+          <span className="text-ink-500">Not verified</span>
         )}
       </dd>
 

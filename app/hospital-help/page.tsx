@@ -90,33 +90,33 @@ export default function HospitalHelpPage() {
       <section aria-labelledby="now-heading" className="mt-12">
         <h2
           id="now-heading"
-          className="text-2xl font-semibold tracking-tight text-slate-900"
+          className="text-2xl font-semibold tracking-tight text-ink-900"
         >
           What can help you today
         </h2>
 
-        <p className="mt-3 leading-relaxed text-slate-600">
+        <p className="mt-3 leading-relaxed text-ink-600">
           These pages exist now, need no account, and cover most of what the
           guided version would tell you.
         </p>
 
-        <ul className="mt-5 divide-y divide-slate-200 overflow-hidden rounded-md border border-slate-200">
+        <ul className="mt-5 surface divide-y divide-ink-200 overflow-hidden rounded-xl">
           {AVAILABLE_NOW.map((item) => (
             <li key={item.href}>
               <Link
                 href={item.href}
-                className="focus-ring flex items-start justify-between gap-4 px-5 py-4 transition-colors hover:bg-slate-50"
+                className="focus-ring flex items-start justify-between gap-4 px-5 py-4 transition-colors hover:bg-ink-50"
               >
                 <span>
-                  <span className="block font-semibold text-slate-900">
+                  <span className="block font-semibold text-ink-900">
                     {item.title}
                   </span>
-                  <span className="mt-1 block text-sm leading-relaxed text-slate-600">
+                  <span className="mt-1 block text-sm leading-relaxed text-ink-600">
                     {item.detail}
                   </span>
                 </span>
 
-                <span aria-hidden="true" className="mt-0.5 shrink-0 text-slate-400">
+                <span aria-hidden="true" className="mt-0.5 shrink-0 text-ink-400">
                   →
                 </span>
               </Link>
@@ -128,12 +128,12 @@ export default function HospitalHelpPage() {
       <section aria-labelledby="planned-heading" className="mt-16">
         <h2
           id="planned-heading"
-          className="text-2xl font-semibold tracking-tight text-slate-900"
+          className="text-2xl font-semibold tracking-tight text-ink-900"
         >
           What this page is meant to become
         </h2>
 
-        <p className="mt-3 leading-relaxed text-slate-600">
+        <p className="mt-3 leading-relaxed text-ink-600">
           None of the following works yet. It is written down so you can see
           what is coming rather than being shown a blank page.
         </p>
@@ -141,8 +141,8 @@ export default function HospitalHelpPage() {
         <dl className="mt-5 space-y-5">
           {PLANNED.map((item) => (
             <div key={item.title}>
-              <dt className="font-medium text-slate-900">{item.title}</dt>
-              <dd className="mt-1 text-sm leading-relaxed text-slate-600">
+              <dt className="font-medium text-ink-900">{item.title}</dt>
+              <dd className="mt-1 text-sm leading-relaxed text-ink-600">
                 {item.detail}
               </dd>
             </div>

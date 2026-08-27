@@ -39,29 +39,29 @@ export default function ClaimsPage() {
           {CLAIM_ROUTES.map((route) => (
             <div
               key={route.id}
-              className="rounded-md border border-slate-200 p-5"
+              className="surface rounded-xl p-5"
             >
-              <h3 className="font-semibold text-slate-900">{route.name}</h3>
+              <h3 className="font-semibold text-ink-900">{route.name}</h3>
 
-              <p className="mt-2 text-sm leading-relaxed text-slate-600">
+              <p className="mt-2 text-sm leading-relaxed text-ink-600">
                 {route.summary}
               </p>
 
               <dl className="mt-4 space-y-2 text-sm">
                 <div>
-                  <dt className="text-slate-500">Money</dt>
-                  <dd className="text-slate-800">{route.moneyFlow}</dd>
+                  <dt className="text-ink-500">Money</dt>
+                  <dd className="text-ink-800">{route.moneyFlow}</dd>
                 </div>
 
                 <div>
-                  <dt className="text-slate-500">Used when</dt>
-                  <dd className="text-slate-800">{route.bestFor}</dd>
+                  <dt className="text-ink-500">Used when</dt>
+                  <dd className="text-ink-800">{route.bestFor}</dd>
                 </div>
               </dl>
 
               <a
                 href={`#${route.id}`}
-                className="focus-ring mt-4 inline-block rounded text-sm font-medium text-teal-800 underline underline-offset-4 hover:text-teal-900"
+                className="focus-ring mt-4 inline-block rounded text-sm font-medium text-brand-700 underline underline-offset-4 hover:text-brand-800"
               >
                 Steps for a {route.name.toLowerCase()}
               </a>
@@ -79,17 +79,17 @@ export default function ClaimsPage() {
         >
           <h2
             id={`${route.id}-heading`}
-            className="text-2xl font-semibold tracking-tight text-slate-900"
+            className="text-2xl font-semibold tracking-tight text-ink-900"
           >
             {route.name}, step by step
           </h2>
 
-          <p className="mt-3 leading-relaxed text-slate-600">{route.summary}</p>
+          <p className="mt-3 leading-relaxed text-ink-600">{route.summary}</p>
 
           <div className="mt-8 space-y-8">
             {route.stages.map((stage) => (
               <div key={stage.stage}>
-                <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500">
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-ink-500">
                   {stage.stage}
                 </h3>
 
@@ -98,17 +98,17 @@ export default function ClaimsPage() {
                     <li key={step.title} className="flex gap-4">
                       <span
                         aria-hidden="true"
-                        className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-slate-300 text-xs font-medium text-slate-600"
+                        className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-ink-300 text-xs font-medium text-ink-600"
                       >
                         {index + 1}
                       </span>
 
                       <div>
-                        <p className="font-medium text-slate-900">
+                        <p className="font-medium text-ink-900">
                           {step.title}
                         </p>
 
-                        <p className="mt-1 text-sm leading-relaxed text-slate-600">
+                        <p className="mt-1 text-sm leading-relaxed text-ink-600">
                           {step.detail}
                         </p>
                       </div>
@@ -124,20 +124,20 @@ export default function ClaimsPage() {
       <section aria-labelledby="documents-heading" className="mt-16">
         <h2
           id="documents-heading"
-          className="text-2xl font-semibold tracking-tight text-slate-900"
+          className="text-2xl font-semibold tracking-tight text-ink-900"
         >
           Documents commonly needed
         </h2>
 
-        <p className="mt-3 leading-relaxed text-slate-600">
+        <p className="mt-3 leading-relaxed text-ink-600">
           Insurers differ, and yours may ask for more or fewer. Collect these
           while you are still at the hospital — going back for them afterwards
           is much harder.
         </p>
 
-        <ul className="mt-5 divide-y divide-slate-200 overflow-hidden rounded-md border border-slate-200">
+        <ul className="mt-5 surface divide-y divide-ink-200 overflow-hidden rounded-xl">
           {COMMON_DOCUMENTS.map((document) => (
-            <li key={document} className="px-4 py-3 text-slate-700 sm:px-5">
+            <li key={document} className="px-4 py-3 text-ink-700 sm:px-5">
               {document}
             </li>
           ))}
@@ -147,12 +147,12 @@ export default function ClaimsPage() {
       <section aria-labelledby="verify-heading" className="mt-16">
         <h2
           id="verify-heading"
-          className="text-2xl font-semibold tracking-tight text-slate-900"
+          className="text-2xl font-semibold tracking-tight text-ink-900"
         >
           What to check before you commit
         </h2>
 
-        <p className="mt-3 leading-relaxed text-slate-600">
+        <p className="mt-3 leading-relaxed text-ink-600">
           Most claim problems are decided before treatment starts, not after.
           These are worth confirming with the insurer directly.
         </p>
@@ -161,7 +161,7 @@ export default function ClaimsPage() {
           {THINGS_TO_VERIFY.map((item) => (
             <li
               key={item}
-              className="rounded-md border border-slate-200 px-4 py-3 text-slate-700"
+              className="surface rounded-xl px-4 py-3 text-ink-700"
             >
               {item}
             </li>
@@ -172,7 +172,7 @@ export default function ClaimsPage() {
       <section aria-labelledby="mistakes-heading" className="mt-16">
         <h2
           id="mistakes-heading"
-          className="text-2xl font-semibold tracking-tight text-slate-900"
+          className="text-2xl font-semibold tracking-tight text-ink-900"
         >
           Common mistakes
         </h2>
@@ -180,8 +180,8 @@ export default function ClaimsPage() {
         <dl className="mt-5 space-y-5">
           {COMMON_MISTAKES.map((item) => (
             <div key={item.mistake}>
-              <dt className="font-medium text-slate-900">{item.mistake}</dt>
-              <dd className="mt-1 text-sm leading-relaxed text-slate-600">
+              <dt className="font-medium text-ink-900">{item.mistake}</dt>
+              <dd className="mt-1 text-sm leading-relaxed text-ink-600">
                 {item.why}
               </dd>
             </div>
@@ -208,14 +208,14 @@ export default function ClaimsPage() {
         </p>
       </Callout>
 
-      <section className="mt-12 rounded-md border border-slate-200 bg-slate-50 p-5 sm:p-6">
-        <h2 className="font-semibold text-slate-900">Related</h2>
+      <section className="mt-12 surface rounded-xl bg-white p-5 sm:p-6">
+        <h2 className="font-semibold text-ink-900">Related</h2>
 
         <ul className="mt-3 space-y-2 text-sm">
           <li>
             <Link
               href="/understand-policy"
-              className="focus-ring rounded font-medium text-teal-800 underline underline-offset-4 hover:text-teal-900"
+              className="focus-ring rounded font-medium text-brand-700 underline underline-offset-4 hover:text-brand-800"
             >
               What room rent limits and co-payments actually mean
             </Link>
@@ -223,7 +223,7 @@ export default function ClaimsPage() {
           <li>
             <Link
               href="/coverage-estimator"
-              className="focus-ring rounded font-medium text-teal-800 underline underline-offset-4 hover:text-teal-900"
+              className="focus-ring rounded font-medium text-brand-700 underline underline-offset-4 hover:text-brand-800"
             >
               Estimate how much of a bill a policy might pay
             </Link>
@@ -231,7 +231,7 @@ export default function ClaimsPage() {
           <li>
             <Link
               href="/hospitals"
-              className="focus-ring rounded font-medium text-teal-800 underline underline-offset-4 hover:text-teal-900"
+              className="focus-ring rounded font-medium text-brand-700 underline underline-offset-4 hover:text-brand-800"
             >
               Browse demo hospitals in Chennai
             </Link>
