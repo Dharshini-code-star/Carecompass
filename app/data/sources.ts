@@ -1,5 +1,5 @@
 /**
- * The registry of sources InsureGuide is allowed to cite.
+ * The registry of sources CareCompass is allowed to cite.
  *
  * Records reference a source by id and add their own deep link. Nothing stores
  * a source name or publisher inline, so a source can be corrected in one place.
@@ -78,7 +78,7 @@ export const SOURCES: Record<SourceId, Source> = {
   demo: {
     id: "demo",
     name: "Invented for this prototype",
-    publisher: "InsureGuide",
+    publisher: "CareCompass",
     kind: "demo",
     url: null,
     authoritativeFor: "Nothing. Demo records describe no real organisation.",

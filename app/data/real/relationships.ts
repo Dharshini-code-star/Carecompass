@@ -39,7 +39,7 @@ export const SCHEMES: Record<SchemeId, Scheme> = {
     shortName: "CMCHIS",
     operator: "Government of Tamil Nadu",
     description:
-      "Tamil Nadu's state health insurance scheme. Eligibility, the treatments covered and the amounts payable are set by the scheme, not by InsureGuide.",
+      "Tamil Nadu's state health insurance scheme. Eligibility, the treatments covered and the amounts payable are set by the scheme, not by CareCompass.",
     officialUrl: "https://www.cmchistn.com/",
   },
 };

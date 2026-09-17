@@ -82,7 +82,7 @@ export default function HospitalHelpPage() {
         </p>
 
         <p>
-          InsureGuide is not an emergency service and cannot give medical help.
+          CareCompass is not an emergency service and cannot give medical help.
           In a medical emergency, speak to the hospital staff in front of you.
         </p>
       </Callout>

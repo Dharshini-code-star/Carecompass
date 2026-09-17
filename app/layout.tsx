@@ -1,35 +1,21 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 
 import SiteFooter from "@/app/components/SiteFooter";
 import SiteHeader from "@/app/components/SiteHeader";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
   title: {
-    default: "InsureGuide — Health insurance, made understandable",
-    template: "%s · InsureGuide",
+    default: "CareCompass | Healthcare navigation with confidence",
+    template: "%s | CareCompass",
   },
   description:
-    "Plain-English health insurance guidance for Chennai and Tamil Nadu: find hospitals, understand your policy, estimate what a claim might cover, and follow the claim process.",
+    "Navigate hospitals, insurance and care with confidence. Find hospitals, check verified information, compare options and understand coverage.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full`}
-    >
+    <html lang="en" className="h-full">
       <body className="flex min-h-full flex-col">
         <a
           href="#main"
@@ -37,13 +23,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
-
         <SiteHeader />
-
         <main id="main" className="flex-1">
           {children}
         </main>
-
         <SiteFooter />
       </body>
     </html>

@@ -1,72 +1,60 @@
 @import "tailwindcss";
 
 /*
- * InsureGuide's design language: clinical warmth.
- *
- * The product is read by people who are stressed, often on a phone, sometimes
- * standing at a hospital counter. So: one light theme, warm neutrals rather
- * than cold blue-greys (they read as human rather than corporate), a deep
- * considered teal for trust, and depth used sparingly to establish hierarchy
- * rather than for decoration.
- *
- * Every colour pair below is checked to meet WCAG AA against the surface it is
- * used on. Nothing here is chosen only because it looks nice.
+ * CareCompass design language: clear, calm healthcare navigation.
+ * The product is often used under pressure, so the UI favors quiet hierarchy,
+ * direct evidence and deliberate color over decoration.
  */
 
 @theme {
-  /* Warm neutral ramp. Reads more human than slate for a health product. */
-  --color-ink-50: #faf9f7;
-  --color-ink-100: #f3f1ed;
-  --color-ink-200: #e7e3dc;
-  --color-ink-300: #d4cec4;
-  --color-ink-400: #a9a196;
-  --color-ink-500: #756d62;
-  --color-ink-600: #5b544b;
-  --color-ink-700: #443e37;
-  --color-ink-800: #2c2823;
-  --color-ink-900: #1a1714;
+  --color-ink-50: #f7faf9;
+  --color-ink-100: #eef4f2;
+  --color-ink-200: #d8e4e0;
+  --color-ink-300: #b8cbc5;
+  --color-ink-400: #79918a;
+  --color-ink-500: #5c706a;
+  --color-ink-600: #435750;
+  --color-ink-700: #31443e;
+  --color-ink-800: #23332f;
+  --color-ink-900: #172522;
 
-  /* Deep teal. Medical without being clinical-cold; carries the brand. */
-  --color-brand-50: #eff6f5;
-  --color-brand-100: #d7eae7;
-  --color-brand-200: #afd5cf;
-  --color-brand-300: #7db8b0;
-  --color-brand-400: #4a958c;
-  --color-brand-500: #2e7a70;
-  --color-brand-600: #1f6259;
-  --color-brand-700: #1a4e47;
-  --color-brand-800: #163e39;
-  --color-brand-900: #12312d;
+  --color-brand-50: #eaf8f5;
+  --color-brand-100: #c9eee6;
+  --color-brand-200: #9eddd1;
+  --color-brand-300: #6dc6b7;
+  --color-brand-400: #35a994;
+  --color-brand-500: #168774;
+  --color-brand-600: #116f60;
+  --color-brand-700: #0c594e;
+  --color-brand-800: #08473f;
+  --color-brand-900: #063832;
 
-  /* Caution / demo data. Warm, serious, not alarming. */
-  --color-caution-50: #fdf8ed;
-  --color-caution-100: #faeecf;
-  --color-caution-200: #f3da9e;
-  --color-caution-300: #e5bc63;
-  --color-caution-600: #8f6414;
-  --color-caution-700: #74510f;
-  --color-caution-800: #5c400c;
+  --color-caution-50: #fff8eb;
+  --color-caution-100: #fff0ca;
+  --color-caution-200: #f7d992;
+  --color-caution-300: #e9b955;
+  --color-caution-600: #936316;
+  --color-caution-700: #765011;
+  --color-caution-800: #5a3d0d;
 
-  /* Source-provided. Distinct from "verified" without shouting. */
-  --color-cite-50: #eff5fb;
-  --color-cite-100: #d8e7f5;
-  --color-cite-200: #b0cdea;
-  --color-cite-600: #2c6296;
-  --color-cite-700: #23507c;
+  --color-cite-50: #eff7fc;
+  --color-cite-100: #dcecf8;
+  --color-cite-200: #b9d9ee;
+  --color-cite-600: #23729f;
+  --color-cite-700: #1d5d84;
 
-  /* Layered elevation. Tinted with the ink hue so shadows never look grey. */
-  --shadow-xs: 0 1px 2px 0 rgb(26 23 20 / 0.04);
+  --shadow-xs: 0 1px 2px 0 rgb(23 37 34 / 0.04);
   --shadow-sm:
-    0 1px 3px 0 rgb(26 23 20 / 0.05), 0 1px 2px -1px rgb(26 23 20 / 0.04);
+    0 1px 3px 0 rgb(23 37 34 / 0.06), 0 1px 2px -1px rgb(23 37 34 / 0.04);
   --shadow-md:
-    0 2px 6px -1px rgb(26 23 20 / 0.06), 0 4px 12px -2px rgb(26 23 20 / 0.05);
+    0 2px 6px -1px rgb(23 37 34 / 0.07), 0 4px 12px -2px rgb(23 37 34 / 0.05);
   --shadow-lg:
-    0 8px 24px -4px rgb(26 23 20 / 0.08), 0 2px 8px -2px rgb(26 23 20 / 0.05);
+    0 8px 24px -4px rgb(23 37 34 / 0.09), 0 2px 8px -2px rgb(23 37 34 / 0.05);
 }
 
 @theme inline {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "SFMono-Regular", "Consolas", "Liberation Mono", monospace;
 }
 
 @layer base {
@@ -96,12 +84,11 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Headings carry the brand voice: tight, confident, never shouty. */
   h1,
   h2,
   h3 {
     color: var(--color-ink-900);
-    letter-spacing: -0.021em;
+    letter-spacing: 0;
     text-wrap: balance;
   }
 
@@ -114,18 +101,12 @@
     color: var(--color-brand-900);
   }
 
-  /* Figures line up in columns wherever money or dates are shown. */
   [data-numeric] {
     font-variant-numeric: tabular-nums;
   }
 }
 
 @layer components {
-  /*
-   * One focus treatment for every interactive element. `outline` rather than a
-   * box-shadow ring, so it follows border radii and survives Windows
-   * high-contrast mode.
-   */
   .focus-ring:focus {
     outline: none;
   }
@@ -135,14 +116,12 @@
     outline-offset: 2px;
   }
 
-  /* The standard raised surface: a white card on the warm canvas. */
   .surface {
     background-color: #ffffff;
     border: 1px solid var(--color-ink-200);
     box-shadow: var(--shadow-sm);
   }
 
-  /* A surface that responds to being clickable. */
   .surface-interactive {
     background-color: #ffffff;
     border: 1px solid var(--color-ink-200);
@@ -156,27 +135,9 @@
   .surface-interactive:hover {
     border-color: var(--color-brand-200);
     box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
   }
 
-  /*
-   * The hero wash: a barely-there radial tint that gives the top of the page
-   * some depth without becoming a decorative gradient.
-   */
-  .hero-wash {
-    background-image:
-      radial-gradient(
-        ellipse 80% 60% at 12% -10%,
-        var(--color-brand-100) 0%,
-        transparent 60%
-      ),
-      radial-gradient(
-        ellipse 60% 50% at 95% 0%,
-        var(--color-caution-100) 0%,
-        transparent 55%
-      );
-  }
-
-  /* Small-caps metadata label, used for eyebrows and field labels. */
   .label-eyebrow {
     font-size: 0.75rem;
     font-weight: 600;

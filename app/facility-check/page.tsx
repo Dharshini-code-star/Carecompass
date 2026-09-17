@@ -79,7 +79,7 @@ export default async function FacilityCheckPage(
       >
         <p>{result.safety}</p>
         <p>
-          InsureGuide does not know anyone&apos;s condition and never decides
+          CareCompass does not know anyone&apos;s condition and never decides
           where someone should be treated. Any move between hospitals is a
           decision for the treating medical team.
         </p>

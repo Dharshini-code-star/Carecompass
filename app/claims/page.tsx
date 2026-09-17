@@ -203,7 +203,7 @@ export default function ClaimsPage() {
 
         <p>
           For anything that affects your own claim, confirm it with your insurer
-          or the hospital&apos;s insurance desk. InsureGuide cannot make, submit
+          or the hospital&apos;s insurance desk. CareCompass cannot make, submit
           or influence a claim.
         </p>
       </Callout>

@@ -3,11 +3,18 @@ import type { Provenance } from "@/app/data/provenance";
 import { getSource } from "@/app/data/sources";
 import { formatIsoDate } from "@/app/lib/format";
 
-/**
- * Where a record or a single field came from: its status, the named source, a
- * link to the exact page, and when it was last checked. Real and demo records
- * both flow through this, so nothing can be displayed without it.
- */
+function sourceType(kind: string) {
+  return kind === "official-site"
+    ? "Official hospital information"
+    : kind === "government"
+      ? "Government source"
+      : kind === "regulator"
+        ? "Regulator"
+        : kind === "demo"
+          ? "Demo data"
+          : "Source";
+}
+
 export default function ProvenanceNote({
   provenance,
   showBadge = true,
@@ -22,47 +29,52 @@ export default function ProvenanceNote({
   const checked = lastVerified ? formatIsoDate(lastVerified) : null;
 
   return (
-    <div className={`text-xs leading-relaxed text-ink-500 ${className}`}>
-      <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5">
+    <div className={["text-xs text-ink-500", className].join(" ")}>
+      <div className="flex flex-wrap items-center gap-2">
         {showBadge ? <VerificationBadge status={status} /> : null}
-
-        {source ? (
-          <span>
-            <span className="text-ink-500">Source</span>{" "}
-            {sourceUrl ? (
-              <a
-                href={sourceUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="focus-ring rounded font-medium text-ink-700 underline decoration-ink-300 underline-offset-2 transition-colors hover:text-brand-700 hover:decoration-brand-400"
-              >
-                {source.name}
-              </a>
-            ) : (
-              <span className="font-medium text-ink-700">{source.name}</span>
-            )}
-          </span>
-        ) : (
-          <span className="text-ink-500">No source</span>
-        )}
-
-        <span aria-hidden="true" className="text-ink-300">
-          &middot;
-        </span>
-
-        <span>
-          <span className="text-ink-500">Last verified</span>{" "}
-          <span className="font-medium text-ink-700" data-numeric>
-            {checked ?? "never"}
-          </span>
-        </span>
+        <details className="group">
+          <summary className="focus-ring cursor-pointer list-none rounded font-semibold text-brand-700 underline underline-offset-2 hover:text-brand-800">
+            View evidence
+          </summary>
+          <dl className="mt-3 grid gap-2 border-l-2 border-ink-200 pl-3 leading-relaxed">
+            <div>
+              <dt className="inline text-ink-500">Source: </dt>
+              <dd className="inline font-medium text-ink-700">
+                {sourceUrl ? (
+                  <a
+                    href={sourceUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="focus-ring rounded underline decoration-ink-300 underline-offset-2 hover:text-brand-700"
+                  >
+                    {source?.name ?? "Source link"}
+                  </a>
+                ) : (
+                  source?.name ?? "No verified source available"
+                )}
+              </dd>
+            </div>
+            <div>
+              <dt className="inline text-ink-500">Source type: </dt>
+              <dd className="inline text-ink-700">
+                {source ? sourceType(source.kind) : "Unknown"}
+              </dd>
+            </div>
+            <div>
+              <dt className="inline text-ink-500">Retrieved: </dt>
+              <dd className="inline text-ink-700" data-numeric>
+                {checked ?? "Unknown"}
+              </dd>
+            </div>
+            {note ? (
+              <div>
+                <dt className="inline text-ink-500">Relevant information: </dt>
+                <dd className="inline text-ink-700">{note}</dd>
+              </div>
+            ) : null}
+          </dl>
+        </details>
       </div>
-
-      {note ? (
-        <p className="mt-2 border-l-2 border-ink-200 pl-3 text-ink-500">
-          {note}
-        </p>
-      ) : null}
     </div>
   );
 }

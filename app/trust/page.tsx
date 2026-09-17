@@ -25,7 +25,7 @@ import {
 export const metadata: Metadata = {
   title: "Where our data comes from",
   description:
-    "Every record InsureGuide shows, the official source it came from, and exactly what remains unverified.",
+    "Every record CareCompass shows, its source, verification state and any remaining unknowns.",
 };
 
 const STATUS_ORDER: VerificationStatus[] = [
@@ -57,14 +57,14 @@ const DATASETS = [
 ];
 
 /** Stated plainly rather than buried, because this is the honest part. */
-const NOT_VERIFIED = [
+const UNKNOWN_INFORMATION = [
   {
     what: "Whether any private insurer covers you at any hospital",
-    why: "Network lists are set per insurer and can differ between two policies from the same insurer. They change without notice, and no third party can mirror them accurately. Every private insurer shows as Not verified against every hospital.",
+    why: "Network lists can differ by insurer and policy. Every private insurer remains Unknown until an official network list is verified.",
   },
   {
     what: "Which facilities a hospital has",
-    why: "The CMCHIS list publishes names, districts and ownership — not facilities. We have not obtained a facility inventory from any official source, so ICU, blood bank, CT and the rest read Could not be verified for every hospital. The one exception is emergency care, confirmed from a hospital website for one record.",
+    why: "The CMCHIS list does not publish facilities. ICU, blood bank and CT information remain Unknown unless an official source confirms them.",
   },
   {
     what: "Distances between hospitals",
@@ -94,8 +94,8 @@ const NOT_VERIFIED = [
 
 const RULES = [
   "A record is never marked verified because it looks plausible. Verified means someone checked it against an official source on a stated date.",
-  "Where a fact cannot be confirmed, the field is left empty and shown as Not verified. Missing information is never filled in with something reasonable-sounding.",
-  "InsureGuide never states that a hospital accepts an insurer, that treatment will be cashless, or that a claim will be approved.",
+  "Where a fact cannot be confirmed, it is shown as Unknown. Missing information is never filled in with a guess.",
+  "CareCompass never states that a hospital accepts an insurer, that treatment will be cashless, or that a claim will be approved.",
   "Product existence and hospital network status are stored as separate facts, so one can never be inferred from the other.",
   "Invented data is labelled DEMO DATA on every screen it appears on, and is kept in a separate part of the app from real records.",
   "Every real record carries the source it came from and the date it was last checked, and both travel with it wherever it is displayed.",
@@ -228,7 +228,7 @@ export default function TrustPage() {
           id="unverified-heading"
           className="text-2xl font-semibold tracking-tight text-ink-900"
         >
-          What is still not verified
+          What is still unknown
         </h2>
 
         <p className="mt-3 leading-relaxed text-ink-600">
@@ -237,7 +237,7 @@ export default function TrustPage() {
         </p>
 
         <dl className="mt-6 space-y-5">
-          {NOT_VERIFIED.map((item) => (
+          {UNKNOWN_INFORMATION.map((item) => (
             <div key={item.what}>
               <dt className="font-medium text-ink-900">{item.what}</dt>
               <dd className="mt-1 text-sm leading-relaxed text-ink-600">

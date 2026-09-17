@@ -1,9 +1,9 @@
-# InsureGuide
+# CareCompass
 
 Plain-English health insurance guidance for Chennai and Tamil Nadu.
 
 People usually meet insurance information when they are stressed, confused, or
-already standing at a hospital desk. InsureGuide's job is to explain what a
+already standing at a hospital desk. CareCompass's job is to explain what a
 policy means and what to do next, without friction and without an account.
 
 ## The data rule this project is built around
